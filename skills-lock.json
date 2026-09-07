@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "skills": {
+    "okx-agent-payments-protocol": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-agent-payments-protocol/SKILL.md",
+      "computedHash": "ad6b4d75c0dd69de7ab06acf3aababadfa968d968c3d9ed56c3be9d101178f26"
+    },
+    "okx-agentic-wallet": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-agentic-wallet/SKILL.md",
+      "computedHash": "0ed6a8903fb6507c1c3117835d9cbbfacf73cb151ff96130d53eccb0e145d622"
+    },
+    "okx-ai": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-ai/SKILL.md",
+      "computedHash": "1cfdbcfb6d8d232da4616aa127cbaee3a7ab8c42f890aa9d53968b121c9b28ff"
+    },
+    "okx-dapp-discovery": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-dapp-discovery/SKILL.md",
+      "computedHash": "43ea50c81e9e9059a77243c58fa33c7344640db2421b872f934ca6854b4ec139"
+    },
+    "okx-defi": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-defi/SKILL.md",
+      "computedHash": "c16ca67656d9ba1672c5ce41e60d000d70c6921e38b180a2ba59f8cec9162abe"
+    },
+    "okx-dex-market": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-dex-market/SKILL.md",
+      "computedHash": "5dea93fcbf25c561c1c22ba87873a1797d8741ee7f78a57d23aa6d79be0e1ba9"
+    },
+    "okx-growth-competition": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-growth-competition/SKILL.md",
+      "computedHash": "e4ee508fdf8129ffacc6b94ac10d41c0810dd70e199cdc4fccd167085df73f6c"
+    },
+    "okx-guide": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-guide/SKILL.md",
+      "computedHash": "e50525d38c44f200ca7ba7aa69dcb67adcd44f70eab5fbc0e1afcfb4a36c330f"
+    }
+  }
+}

@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AUDIT — Intelligence & Security Layer for Binance Agent OS</title>
+  <meta name="description" content="Autonomous security, token risk scoring, contract auditing, and market intelligence layer for Binance Agent OS agents via Model Context Protocol (MCP)." />
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body class="dark-theme">
+  <!-- Ambient Background Glows -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <span class="binance-diamond">⬡</span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">AUDIT</span>
+          <span class="brand-badge">Binance Agent OS</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#playground" class="nav-link active">Intelligence Hub</a>
+        <a href="#market-alpha" class="nav-link">Market Alpha</a>
+        <a href="#decision-engine" class="nav-link">Agent Decision Engine</a>
+        <a href="#mcp-inspector" class="nav-link">MCP Protocol</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span class="status-text">MCP Server Online</span>
+        </div>
+        <a href="https://github.com" target="_blank" class="btn btn-secondary btn-sm" id="github-link">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="track-badge">
+        <span class="star-icon">⚡</span> Binance Agent OS Hackathon — Track A Submission
+      </div>
+      <h1 class="hero-title">
+        The Intelligence & Security Layer for <span class="gradient-text">Crypto AI Agents</span>
+      </h1>
+      <p class="hero-subtitle">
+        AUDIT empowers autonomous trading, DeFi, and execution agents with real-time token risk scoring, smart contract audits, pre-trade simulation, and Binance market intelligence via the <strong>Model Context Protocol (MCP)</strong>.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-val">9</div>
+          <div class="stat-lbl">Native MCP Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">Llama 3.3 70B</div>
+          <div class="stat-lbl">Groq AI Reasoning</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">BNB + EVM</div>
+          <div class="stat-lbl">Multi-Chain Coverage</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">&lt; 150ms</div>
+          <div class="stat-lbl">Execution Guard Latency</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Interactive Playground -->
+  <section id="playground" class="section playground-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">LIVE AGENT INTELLIGENCE HUB</span>
+        <h2 class="section-title">Test Any Asset, Contract, or Trade Intent</h2>
+        <p class="section-desc">Try live queries below to see how AUDIT provides real-time security telemetry and Groq AI reasoning to Binance Agent OS.</p>
+      </div>
+
+      <!-- Playground Tab Navigation -->
+      <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="tab-unified">🔍 Unified Auto-Detect</button>
+        <button class="tab-btn" data-tab="tab-token">🪙 Token & Honeypot</button>
+        <button class="tab-btn" data-tab="tab-contract">📜 Smart Contract</button>
+        <button class="tab-btn" data-tab="tab-tx">⚡ Pre-Trade Simulator</button>
+        <button class="tab-btn" data-tab="tab-decision">🧠 Agent Decision (ALLOW / BLOCK)</button>
+        <button class="tab-btn" data-tab="tab-market">📊 Binance Market Alpha</button>
+      </div>
+
+      <!-- Playground Content Cards -->
+      <div class="playground-card glass-panel">
+        
+        <!-- Tab 1: Unified Auto-Detect -->
+        <div class="tab-pane active" id="tab-unified">
+          <div class="pane-header">
+            <h3>Unified Intelligent Routing</h3>
+            <p>Paste any token address, contract, wallet, tx hash, or protocol slug. AUDIT auto-identifies the target and routes to specialized intelligence analyzers.</p>
+          </div>
+          <div class="query-box">
+            <div class="input-group">
+              <input type="text" id="unified-input" placeholder="e.g. 0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82 or pancakeswap" value="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" />
+              <select id="unified-chain">
+                <option value="bsc" selected>BNB Chain (BSC)</option>
+                <option value="opbnb">opBNB</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="base">Base</option>
+                <option value="arbitrum">Arbitrum</option>
+              </select>
+              <button class="btn btn-primary" id="btn-run-unified">Audit Asset</button>
+            </div>
+            <div class="sample-pills">
+              <span class="pill-label">Quick Samples:</span>
+              <button class="pill-btn" data-target="unified" data-input="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" data-chain="bsc">CAKE Token (BSC)</button>
+              <button class="pill-btn" data-target="unified" data-input="pancakeswap" data-chain="bsc">PancakeSwap Protocol</button>
+              <button class="pill-btn" data-target="unified" data-input="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640" data-chain="ethereum">Uniswap V3 Pool</button>
+            </div>
+          </div>
+          <div class="result-area" id="unified-result" style="display: none;"></div>
+        </div>
+
+        <!-- Tab 2: Token Auditor -->
+        <div class="tab-pane" id="tab-token">
+          <div class="pane-header">
+            <h3>Token & Honeypot Risk Auditor</h3>
+            <p>Inspects buy/sell taxes, blacklist functions, proxy minting privileges, and DEX liquidity depth to prevent agents from buying rugs.</p>
+          </div>
+          <div class="query-box">
+            <div class="input-group">
+              <input type="text" id="token-input" placeholder="Token Contract Address (0x...)" value="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" />
+              <select id="token-chain">
+                <option value="bsc" selected>BNB Chain (BSC)</option>
+                <option value="opbnb">opBNB</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="base">Base</option>
+              </select>
+              <button class="btn btn-primary" id="btn-run-token">Analyze Token</button>
+            </div>
+            <div class="sample-pills">
+              <span class="pill-label">Try Token:</span>
+              <button class="pill-btn" data-target="token" data-input="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" data-chain="bsc">CAKE (PancakeSwap)</button>
+              <button class="pill-btn" data-target="token" data-input="0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c" data-chain="bsc">WBNB (BNB Chain)</button>
+              <button class="pill-btn" data-target="token" data-input="0x6982508145454ce325ddbe47a25d4ec3d2311933" data-chain="ethereum">PEPE (Ethereum)</button>
+            </div>
+          </div>
+          <div class="result-area" id="token-result" style="display: none;"></div>
+        </div>
+
+        <!-- Tab 3: Contract Auditor -->
+        <div class="tab-pane" id="tab-contract">
+          <div class="pane-header">
+            <h3>Smart Contract Vulnerability Inspector</h3>
+            <p>Analyzes deployed bytecode, proxy contracts, access control risks, and generates a Groq AI plain-English summary.</p>
+          </div>
+          <div class="query-box">
+            <div class="input-group">
+              <input type="text" id="contract-input" placeholder="Smart Contract Address (0x...)" value="0x10ed43c718714eb63d5aa57b78b54704e256024e" />
+              <select id="contract-chain">
+                <option value="bsc" selected>BNB Chain (BSC)</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="base">Base</option>
+              </select>
+              <button class="btn btn-primary" id="btn-run-contract">Audit Contract</button>
+            </div>
+            <div class="sample-pills">
+              <span class="pill-label">Try Contract:</span>
+              <button class="pill-btn" data-target="contract" data-input="0x10ed43c718714eb63d5aa57b78b54704e256024e" data-chain="bsc">PancakeSwap V2 Router (BSC)</button>
+              <button class="pill-btn" data-target="contract" data-input="0x000000000022d473030f116ddee9f6b43ac78ba3" data-chain="ethereum">Permit2 (Ethereum)</button>
+            </div>
+          </div>
+          <div class="result-area" id="contract-result" style="display: none;"></div>
+        </div>
+
+        <!-- Tab 4: Pre-Trade Simulator -->
+        <div class="tab-pane" id="tab-tx">
+          <div class="pane-header">
+            <h3>Transaction Pre-Execution Simulator</h3>
+            <p>Simulates transactions before signing to detect phishing drainers, anomalous approvals, and state overrides.</p>
+          </div>
+          <div class="query-box">
+            <div class="input-group">
+              <input type="text" id="tx-input" placeholder="Transaction Hash (0x...)" value="0x50d4f3b7c8e9f2a1b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6" />
+              <select id="tx-chain">
+                <option value="bsc" selected>BNB Chain (BSC)</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="base">Base</option>
+              </select>
+              <button class="btn btn-primary" id="btn-run-tx">Simulate Tx</button>
+            </div>
+          </div>
+          <div class="result-area" id="tx-result" style="display: none;"></div>
+        </div>
+
+        <!-- Tab 5: Agent Decision Engine -->
+        <div class="tab-pane" id="tab-decision">
+          <div class="pane-header">
+            <h3>Autonomous Agent Decision Engine (ALLOW / WARN / BLOCK)</h3>
+            <p>The core intelligence bridge for Binance Agent OS. AI trading agents submit proposed trades and security findings; AUDIT synthesizes telemetry with Groq Llama 3.3 to issue an enforceable verdict.</p>
+          </div>
+          <div class="query-box">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Proposed Trade / Action Context:</label>
+                <textarea id="decision-context" rows="3" placeholder="e.g. Execute $10,000 swap on PancakeSwap into XYZ token with 1% slippage.">Autonomous trading agent preparing $5,000 buy of XYZ meme token on PancakeSwap BNB Chain. Liquidity is $25,000, 2% sell tax detected.</textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Initial Risk Score (0-100):</label>
+                  <input type="number" id="decision-risk" min="0" max="100" value="45" />
+                </div>
+                <div class="form-group">
+                  <label>Specific Evaluation Question (Optional):</label>
+                  <input type="text" id="decision-question" placeholder="Should the agent proceed with this position size?" value="Is the liquidity depth safe for a $5k order?" />
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block" id="btn-run-decision">Evaluate Trade Decision with Groq AI</button>
+          </div>
+          <div class="result-area" id="decision-result" style="display: none;"></div>
+        </div>
+
+        <!-- Tab 6: Binance Market Alpha -->
+        <div class="tab-pane" id="tab-market">
+          <div class="pane-header">
+            <h3>Binance Spot & Futures Market Alpha</h3>
+            <p>Live ticker stats, order book depth imbalance, and futures funding rate telemetry for Binance trading agents.</p>
+          </div>
+          <div class="query-box">
+            <div class="input-group">
+              <input type="text" id="market-symbol" placeholder="Symbol (e.g. BNBUSDT, BTCUSDT, ETHUSDT)" value="BNBUSDT" />
+              <button class="btn btn-primary" id="btn-run-market">Fetch Binance Alpha</button>
+            </div>
+            <div class="sample-pills">
+              <span class="pill-label">Pairs:</span>
+              <button class="pill-btn" data-target="market" data-input="BNBUSDT">BNB / USDT</button>
+              <button class="pill-btn" data-target="market" data-input="BTCUSDT">BTC / USDT</button>
+              <button class="pill-btn" data-target="market" data-input="ETHUSDT">ETH / USDT</button>
+              <button class="pill-btn" data-target="market" data-input="SOLUSDT">SOL / USDT</button>
+            </div>
+          </div>
+          <div class="result-area" id="market-result" style="display: none;"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MCP Protocol & Tools Inspector Section -->
+  <section id="mcp-inspector" class="section mcp-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">MODEL CONTEXT PROTOCOL</span>
+        <h2 class="section-title">Binance Agent OS Native MCP Server</h2>
+        <p class="section-desc">Connect Claude Desktop, Cursor, Grok, or custom LangGraph/AutoGen agents to AUDIT's MCP server with zero setup.</p>
+      </div>
+
+      <div class="mcp-grid">
+        <div class="mcp-tools-list glass-panel">
+          <h3 class="panel-subtitle">Available MCP Tools (9 Tools)</h3>
+          <div class="tool-items" id="mcp-tool-items">
+            <div class="tool-item active">
+              <div class="tool-name"><code>audit_token</code></div>
+              <div class="tool-desc">Analyzes token legitimacy, honeypot risk, and buy/sell taxes.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name"><code>audit_contract</code></div>
+              <div class="tool-desc">Inspects smart contract bytecode, proxies, and vulnerabilities.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name"><code>audit_transaction</code></div>
+              <div class="tool-desc">Simulates pre-execution state and phishing risks.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name"><code>evaluate_agent_decision</code></div>
+              <div class="tool-desc">Issues ALLOW, WARN, or BLOCK verdicts with Groq Llama 3.3.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name"><code>get_binance_market_alpha</code></div>
+              <div class="tool-desc">Fetches live Binance order book spread, depth, and funding rate.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mcp-config-box glass-panel">
+          <h3 class="panel-subtitle">Claude Desktop / Cursor MCP Config</h3>
+          <p class="config-desc">Add this JSON block to your <code>claude_desktop_config.json</code> or Cursor MCP settings:</p>
+          <pre class="code-block"><code id="mcp-json-config">{
+  "mcpServers": {
+    "binance-audit": {
+      "command": "node",
+      "args": ["C:/Users/2tynm/Projects/audit/dist/mcp-server.js"],
+      "env": {
+        "GROQ_API_KEY": "your_groq_api_key",
+        "BNB_RPC_URL": "https://bsc-dataseed.binance.org"
+      }
+    }
+  }
+}</code></pre>
+          <button class="btn btn-secondary btn-sm" id="btn-copy-mcp">Copy MCP Config</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Flow -->
+  <section id="architecture" class="section arch-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">ARCHITECTURE & PIPELINE</span>
+        <h2 class="section-title">How AUDIT Protects Binance AI Agents</h2>
+      </div>
+
+      <div class="arch-steps">
+        <div class="arch-card glass-panel">
+          <div class="step-num">01</div>
+          <h4>MCP Tool Discovery</h4>
+          <p>Binance AI Agent queries AUDIT MCP Server to discover security, token, contract, and market tools.</p>
+        </div>
+        <div class="arch-card glass-panel">
+          <div class="step-num">02</div>
+          <h4>Multi-Source Ingestion</h4>
+          <p>AUDIT aggregates on-chain telemetry from BNB Chain RPC, BscScan, GoPlus Security, DeFiLlama, and Binance Market API.</p>
+        </div>
+        <div class="arch-card glass-panel">
+          <div class="step-num">03</div>
+          <h4>Groq AI Synthesis</h4>
+          <p>Llama 3.3 70B runs structured reasoning to detect malicious vectors, slippage traps, and liquidity risks.</p>
+        </div>
+        <div class="arch-card glass-panel">
+          <div class="step-num">04</div>
+          <h4>Enforceable Verdict</h4>
+          <p>Returns structured JSON with <code>ALLOW</code>, <code>WARN</code>, or <code>BLOCK</code>, risk scores, and recommended guards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <div class="brand-text">
+          <span class="binance-diamond">⬡</span>
+          <strong>AUDIT</strong> — Binance Agent OS Intelligence & Security Layer
+        </div>
+        <p class="footer-sub">Submitted to the Binance Agent OS Mini Hackathon (Track A). Built with Groq AI & Model Context Protocol (MCP).</p>
+      </div>
+      <div class="footer-right">
+        <span class="badge-pill">Track A: Agent Creation</span>
+        <span class="badge-pill">Prize Pool: $60K USDC</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+</body>
+</html>
