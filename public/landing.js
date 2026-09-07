@@ -232,7 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const findingsHtml = Array.isArray(data.findings) && data.findings.length > 0
-      ? data.findings.map(f => `<div class="finding-line ${f.severity === 'critical' || f.severity === 'high' ? 'danger' : ''}">FLAG: [${f.severity?.toUpperCase() || 'WARN'}] ${f.title} — ${f.description || f.source || ''}</div>`).join('')
+      ? data.findings.map(f => {
+        const detail = (f.description && f.description !== f.title) ? ` — ${f.description}` : '';
+        const cssClass = f.severity === 'info' ? 'info' : (f.severity === 'critical' || f.severity === 'high' ? 'danger' : '');
+        const prefix = f.severity === 'info' ? 'INFO' : 'FLAG';
+        return `<div class="finding-line ${cssClass}">${prefix}: [${f.severity?.toUpperCase() || 'WARN'}] ${f.title}${detail}</div>`;
+      }).join('')
       : '<div class="finding-line success">STATUS: No critical vulnerability flags identified on-chain.</div>';
 
     container.innerHTML = `

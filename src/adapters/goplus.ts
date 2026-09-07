@@ -1,5 +1,5 @@
-// src/adapters/goplus.ts
-// GoPlus Security Labs API — token/contract/wallet security intelligence
+﻿// src/adapters/goplus.ts
+// GoPlus Security Labs API â€” token/contract/wallet security intelligence
 // Free tier: ~10,000 calls/day. No key required for basic endpoints.
 // Docs: https://docs.gopluslabs.io/reference/api-reference
 
@@ -32,7 +32,7 @@ async function goplusGet<T>(endpoint: string, params: Record<string, string>): P
   }
 }
 
-// ─── Token Security ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Token Security â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface GoPlusTokenSecurity {
   token_name: string;
@@ -102,7 +102,7 @@ export async function getTokenSecurity(
   return key ? result[key] : null;
 }
 
-// ─── Address Security (phishing / malicious wallets) ─────────────────────────
+// â”€â”€â”€ Address Security (phishing / malicious wallets) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface GoPlusAddressSecurity {
   cybercrime: string;
@@ -127,7 +127,7 @@ export async function getAddressSecurity(
   return goplusGet<GoPlusAddressSecurity>(`/address_security/${address}`, {});
 }
 
-// ─── Contract Security ────────────────────────────────────────────────────────
+// â”€â”€â”€ Contract Security â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export async function getContractSecurity(
   address: string,
@@ -137,7 +137,7 @@ export async function getContractSecurity(
   return getTokenSecurity(address, chainId);
 }
 
-// ─── Malicious Address Check ─────────────────────────────────────────────────
+// â”€â”€â”€ Malicious Address Check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface MaliciousAddressResult {
   isMalicious: boolean;
@@ -169,7 +169,7 @@ export function analyzeMaliciousAddress(
   return { isMalicious: flags.length > 0, flags, score: Math.min(100, score) };
 }
 
-// ─── Token Risk Scoring from GoPlus data ────────────────────────────────────
+// â”€â”€â”€ Token Risk Scoring from GoPlus data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface TokenRiskAssessment {
   score: number;         // 0-100 risk
@@ -180,14 +180,16 @@ export interface TokenRiskAssessment {
 }
 
 export function assessTokenRisk(security: GoPlusTokenSecurity | null): TokenRiskAssessment {
-  if (!security) return { score: 50, flags: ['Could not retrieve security data'], isSafe: false, isHoneypot: false, liquidityRisk: 50 };
+  // GoPlus does not cover all contract types (e.g. protocol contracts like Permit2, bridge contracts).
+  // Return a neutral zero-score result so callers can handle it without raising false flags.
+  if (!security) return { score: 0, flags: [], isSafe: true, isHoneypot: false, liquidityRisk: 0 };
 
   const flags: string[] = [];
   let score = 0;
   const isHoneypot = security.is_honeypot === '1';
 
   // Critical flags
-  if (isHoneypot) { flags.push('HONEYPOT — tokens cannot be sold'); score += 50; }
+  if (isHoneypot) { flags.push('HONEYPOT â€” tokens cannot be sold'); score += 50; }
   if (security.cannot_sell_all === '1') { flags.push('Cannot sell all tokens'); score += 30; }
   if (security.cannot_buy === '1') { flags.push('Cannot buy tokens'); score += 25; }
   if (security.hidden_owner === '1') { flags.push('Hidden owner (ownership can be re-taken)'); score += 20; }
@@ -237,3 +239,4 @@ export function assessTokenRisk(security: GoPlusTokenSecurity | null): TokenRisk
     liquidityRisk,
   };
 }
+

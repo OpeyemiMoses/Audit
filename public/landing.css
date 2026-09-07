@@ -557,6 +557,10 @@ select {
 .finding-line.success {
   border-left-color: var(--color-allow);
 }
+.finding-line.info {
+  border-left-color: #4a9eff;
+  color: var(--text-muted);
+}
 
 .terminal-code {
   background-color: #040506;

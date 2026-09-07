@@ -1,4 +1,4 @@
-// src/modules/contract/analyze.ts
+﻿// src/modules/contract/analyze.ts
 import { z } from 'zod';
 import { getChainConfig } from '../../types/chains.js';
 import { buildResponse, Finding, Evidence } from '../../types/response.js';
@@ -88,7 +88,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
 
   const isXLayer = chainConfig.explorerType === 'oklink';
 
-  // ─── Parallel data fetch ──────────────────────────────────────────────────
+  // â”€â”€â”€ Parallel data fetch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [contractBytes, contractSource, contractABI, contractCreation, goplusSecurity] = await Promise.all([
     getCode(address, chainConfig),
     !isXLayer ? getContractSource(address, chainConfig) : Promise.resolve(null),
@@ -102,8 +102,8 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   if (!isActualContract) {
     const response = buildResponse(
       'contract/analyze', chain, chainConfig.id,
-      `Address ${address.slice(0, 8)}... is not a smart contract on ${chainConfig.name} — it is an externally owned account (EOA).`,
-      0, 0.99, [{ id: 'not_contract', severity: 'info', title: 'Not a contract', description: 'This address has no deployed bytecode — it is a wallet, not a contract.', source: 'Alchemy' }],
+      `Address ${address.slice(0, 8)}... is not a smart contract on ${chainConfig.name} â€” it is an externally owned account (EOA).`,
+      0, 0.99, [{ id: 'not_contract', severity: 'info', title: 'Not a contract', description: 'This address has no deployed bytecode â€” it is a wallet, not a contract.', source: 'Alchemy' }],
       ['Analyze this as a wallet using /wallet/analyze instead'], [],
       { address, is_contract: false, reason: 'No bytecode found' },
       start, false, ['Alchemy RPC'],
@@ -125,7 +125,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   evidence.push({ label: 'Source verified', value: isVerified, source: 'Etherscan' });
   evidence.push({ label: 'Compiler', value: compiler, source: 'Etherscan' });
 
-  // ─── Proxy detection ──────────────────────────────────────────────────────
+  // â”€â”€â”€ Proxy detection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const proxyInfo = detectProxyPattern(sourceCode);
   const proxyFromGoplus = goplusSecurity?.is_proxy === '1';
   const isProxy = proxyInfo.isProxy || proxyFromGoplus;
@@ -134,7 +134,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
     findings.push({ id: 'is_proxy', severity: 'warning', title: `Upgradeable proxy (${proxyInfo.proxyType || 'detected by GoPlus'})`, description: 'Contract implementation can be changed by the owner. Behavior may change after upgrade.', source: 'ChainIntel' });
   }
 
-  // ─── Ownership detection ───────────────────────────────────────────────────
+  // â”€â”€â”€ Ownership detection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const ownershipInfo = detectOwnershipPattern(sourceCode);
   evidence.push({ label: 'Ownership pattern', value: ownershipInfo.pattern, source: 'ChainIntel' });
 
@@ -143,7 +143,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
     evidence.push({ label: 'Implementation address', value: implementationAddress, source: 'Etherscan' });
   }
 
-  // ─── Privileged functions ─────────────────────────────────────────────────
+  // â”€â”€â”€ Privileged functions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const privilegedFunctions = extractPrivilegedFunctions(abiStr);
   evidence.push({ label: 'Privileged functions found', value: privilegedFunctions.length, source: 'ChainIntel ABI Parser' });
 
@@ -158,36 +158,48 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
     });
   }
 
-  // ─── GoPlus security ──────────────────────────────────────────────────────
+  // â”€â”€â”€ GoPlus security â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const riskAssessment = assessTokenRisk(goplusSecurity);
-  for (const flag of riskAssessment.flags.slice(0, 6)) {
-    findings.push({ id: `goplus_${findings.length}`, severity: 'warning', title: flag, description: flag, source: 'GoPlus Security' });
+  if (!goplusSecurity) {
+    // GoPlus does not index all contract types (protocol contracts, bridges, permit contracts).
+    // Add a soft info notice instead of a false warning flag.
+    findings.push({
+      id: 'goplus_unavailable',
+      severity: 'info',
+      title: 'GoPlus security scan not available for this contract type',
+      description: 'GoPlus does not index all contracts (e.g. protocol infrastructure, bridges, Permit2-style contracts). Risk assessed from on-chain bytecode and Etherscan source code only.',
+      source: 'GoPlus Security',
+    });
+  } else {
+    for (const flag of riskAssessment.flags.slice(0, 6)) {
+      findings.push({ id: `goplus_${findings.length}`, severity: 'warning', title: flag, description: flag, source: 'GoPlus Security' });
+    }
   }
 
-  // ─── Deployer info ────────────────────────────────────────────────────────
+  // â”€â”€â”€ Deployer info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const deployer = contractCreation?.contractCreator || goplusSecurity?.creator_address || '';
   const deployTx = contractCreation?.txHash || '';
   if (deployer) evidence.push({ label: 'Deployer', value: deployer, source: 'Etherscan' });
 
-  // ─── Self-destruct check ──────────────────────────────────────────────────
+  // â”€â”€â”€ Self-destruct check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const hasSelfDestruct = sourceCode.includes('selfdestruct') || goplusSecurity?.selfdestruct === '1';
   if (hasSelfDestruct) {
-    findings.push({ id: 'selfdestruct', severity: 'critical', title: 'Contract contains selfdestruct — can be permanently destroyed', description: 'Owner can destroy this contract, wiping all balances.', source: 'ChainIntel' });
+    findings.push({ id: 'selfdestruct', severity: 'critical', title: 'Contract contains selfdestruct â€” can be permanently destroyed', description: 'Owner can destroy this contract, wiping all balances.', source: 'ChainIntel' });
   }
 
-  // ─── External call risk ───────────────────────────────────────────────────
+  // â”€â”€â”€ External call risk â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (goplusSecurity?.external_call === '1') {
-    findings.push({ id: 'external_call', severity: 'warning', title: 'External calls detected — potential reentrancy risk', description: 'Contract makes external calls which could be exploited via reentrancy if not properly guarded.', source: 'GoPlus Security' });
+    findings.push({ id: 'external_call', severity: 'warning', title: 'External calls detected â€” potential reentrancy risk', description: 'Contract makes external calls which could be exploited via reentrancy if not properly guarded.', source: 'GoPlus Security' });
   }
 
-  // ─── AI Summary ───────────────────────────────────────────────────────────
+  // â”€â”€â”€ AI Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   let aiSummary = { summary: '', purpose: '', keyFunctions: [] as string[] };
   if (isVerified && (sourceCode.length > 0 || abiStr.length > 0)) {
     aiSummary = await summarizeContract(contractName, sourceCode, abiStr);
     if (aiSummary.summary) dataSources.push('Groq AI');
   }
 
-  // ─── Complexity score ──────────────────────────────────────────────────────
+  // â”€â”€â”€ Complexity score â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   let complexityScore = 0;
   try {
     const abi = JSON.parse(abiStr) as unknown[];
@@ -195,7 +207,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
     complexityScore = Math.min(100, funcCount * 3);
   } catch { /* ignore */ }
 
-  // ─── Risk scoring ──────────────────────────────────────────────────────────
+  // â”€â”€â”€ Risk scoring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   let riskScore = 0;
   if (!isVerified) riskScore += 15;
   if (isProxy) riskScore += 10;
@@ -204,15 +216,15 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   riskScore += riskAssessment.score * 0.3;
   riskScore = Math.min(100, riskScore);
 
-  // ─── Recommendations ───────────────────────────────────────────────────────
-  if (!isVerified) recommendations.push('Source code is not verified — treat with extreme caution');
-  if (isProxy) recommendations.push('This is an upgradeable proxy — the behavior can change at any time. Monitor governance closely.');
-  if (hasSelfDestruct) recommendations.push('Contract can self-destruct — high counterparty risk if funds are stored here');
-  if (privilegedFunctions.length > 5) recommendations.push('Many privileged admin functions exist — understand who controls the owner key');
+  // â”€â”€â”€ Recommendations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  if (!isVerified) recommendations.push('Source code is not verified â€” treat with extreme caution');
+  if (isProxy) recommendations.push('This is an upgradeable proxy â€” the behavior can change at any time. Monitor governance closely.');
+  if (hasSelfDestruct) recommendations.push('Contract can self-destruct â€” high counterparty risk if funds are stored here');
+  if (privilegedFunctions.length > 5) recommendations.push('Many privileged admin functions exist â€” understand who controls the owner key');
   if (isVerified && riskScore < 30) recommendations.push('Source code is verified and risk signals are low');
 
   const confidence = Math.min(0.95, 0.25 + dataSources.length * 0.15 + (isVerified ? 0.2 : 0));
-  const summary = `${contractName} on ${chainConfig.name}: ${isVerified ? 'Verified ✓' : 'Unverified ⚠'} | ${privilegedFunctions.length} privileged functions | ${isProxy ? 'Upgradeable proxy' : 'Non-upgradeable'} | Risk: ${Math.round(riskScore)}/100${aiSummary.purpose ? ` — ${aiSummary.purpose}` : ''}`;
+  const summary = `${contractName} on ${chainConfig.name}: ${isVerified ? 'Verified âœ“' : 'Unverified âš '} | ${privilegedFunctions.length} privileged functions | ${isProxy ? 'Upgradeable proxy' : 'Non-upgradeable'} | Risk: ${Math.round(riskScore)}/100${aiSummary.purpose ? ` â€” ${aiSummary.purpose}` : ''}`;
 
   const response = buildResponse(
     'contract/analyze',
@@ -252,3 +264,4 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   await cache.set(cacheKey, response, 600); // 10 min cache for contracts
   return response;
 }
+
