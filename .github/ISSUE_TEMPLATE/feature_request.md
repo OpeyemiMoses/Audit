@@ -1,16 +1,30 @@
----
-name: Feature Request
-about: Suggest an idea or new intelligence module for ChainIntel ASP
+﻿---
+name: Feature Request / Tool Proposal
+about: Suggest an idea or new MCP tool for AUDIT
 title: '[FEAT] '
 labels: 'enhancement'
 assignees: ''
 ---
 
 **Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem or gap is.
+A clear and concise description of what the problem is. (e.g., "AI agents need to check Binance Earn liquid staking APY before depositing...")
 
-**Proposed Solution / Endpoint**
-Describe the proposed new adapter, intelligence module, or endpoint feature.
+**Describe the solution you'd like**
+A clear and concise description of what tool, endpoint, or adapter you want added.
 
-**Use Case for AI Agents**
-Explain how Web3 AI agents or market callers will benefit from this feature.
+**Proposed Tool Schema / Parameters (if applicable)**
+```json
+{
+  "tool_name": "example_tool",
+  "parameters": {
+    "chain": "bsc",
+    "address": "0x..."
+  }
+}
+```
+
+**Describe alternatives you've considered**
+A clear and concise description of any alternative solutions or features you've considered.
+
+**Additional context**
+Add any other context, diagrams, or references about the feature request here.

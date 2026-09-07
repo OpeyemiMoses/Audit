@@ -1,60 +1,70 @@
-# Contributing to ChainIntel ASP
+﻿# Contributing to AUDIT
 
-Thank you for your interest in contributing to **ChainIntel ASP**! We welcome contributions from developers, researchers, and security analysts across the Web3 ecosystem.
+Thank you for your interest in contributing to **AUDIT — Intelligence & Security Layer for Binance Agent OS**!
+
+We welcome all contributions, including bug reports, new MCP tool integrations, adapter enhancements, documentation improvements, and performance optimizations.
 
 ---
 
-## 🚀 How to Get Started
+## 🛠️ Development Setup
 
-### 1. Fork and Clone
+### 1. Fork & Clone
 ```bash
-git clone https://github.com/YOUR_USERNAME/chainintel-asp.git
-cd chainintel-asp
+git clone https://github.com/OpeyemiMoses/Audit.git
+cd Audit
+```
+
+### 2. Install Dependencies
+```bash
 npm install
 ```
 
-### 2. Environment Setup
-Copy the template configuration and add your local test keys:
+### 3. Configure Environment
+Copy `.env.example` to `.env` and fill in your keys:
 ```bash
 cp .env.example .env
 ```
-Keep `ENABLE_PAYMENT=false` in `.env` while developing locally so API calls run in free mode without requiring x402 payment headers.
 
-### 3. Run Development Server
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
 
 ---
 
-## 🧪 Testing Guidelines
+## 📜 Contribution Guidelines
 
-Before opening a Pull Request, run the TypeScript compiler check to verify zero type errors:
+### 1. Code Standards & Style
+- Write clean, well-documented **TypeScript**.
+- Ensure all types are strictly defined; avoid using `any` wherever possible.
+- Run `npm run lint` or `npx tsc --noEmit` before submitting changes to verify type safety.
+- Follow existing patterns for adapters (`src/adapters/`) and module analyzers (`src/modules/`).
 
-```bash
-npx tsc --noEmit
-```
+### 2. Branch Naming Conventions
+- `feat/your-feature-name` (for new features or tools)
+- `fix/bug-description` (for bug fixes)
+- `docs/what-changed` (for documentation updates)
+- `refactor/component-name` (for code refactoring)
 
-Make sure any new module or adapter:
-- Handles missing API keys gracefully (never crashes the server process).
-- Returns structured `Finding`, `Evidence`, `RiskScore`, and `Summary` objects.
-- Does not expose secret credentials or sensitive tokens in logs or responses.
+### 3. Commit Message Guidelines
+Use Conventional Commits:
+- `feat: add BNB Greenfield storage adapter`
+- `fix: correct honeypot detection on proxy tokens`
+- `docs: update MCP client configuration instructions`
+- `perf: optimize Groq decision engine latency`
 
 ---
 
-## 📬 Submitting a Pull Request
+## 🔄 Pull Request Process
 
-1. **Create a topic branch**: `git checkout -b feat/my-new-feature` or `fix/issue-description`
-2. **Commit your changes**: Follow clean commit message conventions (`feat: ...`, `fix: ...`, `docs: ...`)
-3. **Push to your fork**: `git push origin feat/my-new-feature`
-4. **Open a Pull Request**: Provide a description of what changed, why, and how you tested it.
+1. Create your feature branch from `main`.
+2. Ensure your changes compile with `npm run build` with **0 errors**.
+3. Update relevant documentation in `README.md` if adding or changing MCP tools or endpoints.
+4. Open a Pull Request referencing any related issues.
+5. Provide a clear summary of what your PR introduces and how you verified it.
 
 ---
 
-## 📜 Code Style
+## 💬 Questions & Support
 
-- Use **TypeScript** with strict mode enabled.
-- Prefer `async/await` and handle errors cleanly with custom error classes in `src/lib/errors.ts`.
-- Log warnings and errors via `src/lib/logger.ts` instead of raw `console.log`.
-
-Thank you for helping build the intelligence layer for AI agents! 🤖⚡
+Feel free to open a [GitHub Discussion](https://github.com/OpeyemiMoses/Audit/discussions) or submit an [Issue](https://github.com/OpeyemiMoses/Audit/issues).

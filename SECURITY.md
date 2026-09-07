@@ -1,29 +1,30 @@
-# Security Policy
+﻿# Security Policy
 
-ChainIntel ASP takes security seriously, as it serves as a critical intelligence and risk-evaluation layer for Web3 AI agents and smart contracts.
+## Supported Versions
 
----
+We actively release patches and security fixes for the latest version of AUDIT:
 
-## 🔒 Reporting a Vulnerability
-
-If you discover a security vulnerability or potential exploit within ChainIntel ASP, **please do not open a public GitHub issue**.
-
-Instead, report the issue directly to our security team:
-
-- **Email**: `security@chainintel-asp.org`
-- **Response Time**: We acknowledge reports within 24 hours and aim to provide a resolution or patch within 72 hours.
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.0.x   | :white_check_mark: |
 
 ---
 
-## 🛡️ Key Security Guidelines
+## Reporting a Vulnerability
 
-### Secret Management
-- **Never commit `.env` files** containing live API keys, private keys, or wallet seed phrases.
-- Ensure `OKX_SECRET_KEY` and `OKX_PASSPHRASE` are managed via secure environment variables in production environments (e.g. Railway, AWS Secrets Manager, Vercel).
+The security of AI agents operating on Binance and BNB Chain is our highest priority. If you discover a security vulnerability, we appreciate your help in disclosing it to us responsibly.
 
-### Payment Verification
-- When `ENABLE_PAYMENT=true`, OKX x402 payment headers are verified via the official `@okxweb3/x402-express` SDK.
-- Do not bypass payment verification logic in production builds.
+### How to Report
+- **Do not open a public GitHub issue.**
+- Please report vulnerabilities privately by opening a [GitHub Security Advisory](https://github.com/OpeyemiMoses/Audit/security/advisories/new) or contacting the maintainers directly.
 
-### Data Sanitization
-- All user inputs passed into endpoints are validated against Zod schemas (`src/modules/*/analyze.ts`) to prevent injection attacks and malformed requests.
+### What to Include in Your Report
+1. A clear description of the vulnerability.
+2. Steps to reproduce or proof-of-concept (PoC) code.
+3. The potential impact on agents, sub-accounts, or telemetry integrity.
+4. Any proposed fixes or remediations.
+
+### Our Response Process
+- **Acknowledgment**: Within 48 hours of receipt.
+- **Assessment**: We will evaluate the report and confirm the severity.
+- **Fix & Release**: We will develop and deploy a fix as quickly as possible and credit you in the release notes (if desired).
