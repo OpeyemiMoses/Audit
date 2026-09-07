@@ -997,3 +997,57 @@ select {
 .expander-toggle:hover {
   color: var(--color-brand);
 }
+
+
+/* ===================================================
+   AI AUDIT FEEDBACK & REASONING PANEL (WHY IT IS LIKE THAT)
+   =================================================== */
+
+.ai-feedback-panel {
+  background-color: var(--bg-surface);
+  border: 1px solid rgba(240, 185, 11, 0.25);
+  border-left: 4px solid var(--color-brand);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 800px) {
+  .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.feedback-item {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  padding: 12px 14px;
+}
+.feedback-item.feedback-highlight {
+  border-left: 3px solid var(--color-allow);
+  background-color: rgba(14, 203, 129, 0.03);
+}
+.feedback-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--color-brand);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.feedback-icon {
+  font-size: 13px;
+}
+.feedback-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-main);
+  margin: 0;
+}

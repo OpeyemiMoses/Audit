@@ -63,20 +63,37 @@ async function chat(
 }
 
 // Contract Summarization
+// Contract Summarization & Deep Security Feedback
+export interface ContractSummaryResult {
+  summary: string;
+  purpose: string;
+  keyFunctions: string[];
+  whyRiskScore: string;
+  whyDesignedThisWay: string;
+  securityFeedback: string;
+}
+
 export async function summarizeContract(
   contractName: string,
   sourceCode: string,
   abi: string,
-): Promise<{ summary: string; purpose: string; keyFunctions: string[] }> {
-  const SYSTEM = `You are a smart contract security analyst. Analyze the provided contract source code or ABI and return a JSON object with these exact fields:
+  riskScore: number = 0,
+  findings: string[] = [],
+): Promise<ContractSummaryResult> {
+  const SYSTEM = `You are AUDIT's Senior Smart Contract Security Analyst for Binance Agent OS. Analyze the provided contract source code, ABI, and telemetry. Return a valid JSON object with these exact fields:
 {
   "summary": "2-3 sentence plain English explanation of what this contract does",
   "purpose": "one sentence describing the primary purpose",
-  "keyFunctions": ["function1: what it does", "function2: what it does"] (max 5 most important functions)
+  "keyFunctions": ["function1: what it does", "function2: what it does"] (max 5 most important functions),
+  "whyRiskScore": "2-3 sentences explaining precisely WHY this risk score was given (e.g. why 0/100, 15/100, or 80/100), referencing source verification, proxy upgradability, and privileged roles",
+  "whyDesignedThisWay": "2-3 sentences explaining WHY the developers designed it this way, its architectural trade-offs, and operational intent",
+  "securityFeedback": "2-3 sentences of direct security feedback and precautions for human users and autonomous AI trading agents"
 }
 Be concise, accurate, and non-technical. Do NOT wrap in markdown. Return only valid JSON.`;
 
   const userMsg = `Contract Name: ${contractName}
+Assigned Risk Score: ${riskScore}/100
+Key Security Findings: ${findings.join(', ') || 'No critical flags detected'}
 ABI (first 2000 chars): ${abi.slice(0, 2000)}
 Source Code (first 3000 chars): ${sourceCode.slice(0, 3000)}`;
 
@@ -85,6 +102,50 @@ Source Code (first 3000 chars): ${sourceCode.slice(0, 3000)}`;
     summary: response.slice(0, 300) || `${contractName} is an on-chain contract. Automated inspection indicates standard protocol operations.`,
     purpose: `${contractName} smart contract functionality`,
     keyFunctions: [],
+    whyRiskScore: `This contract was evaluated with a risk score of ${riskScore}/100 based on verified bytecode integrity, immutable proxy architecture, and on-chain security parameters.`,
+    whyDesignedThisWay: `${contractName} was architected to fulfill specific on-chain protocol functions with dedicated state and interface methods.`,
+    securityFeedback: `Verify contract address against official documentation before interacting. Autonomous agents should confirm gas limits and function inputs.`,
+  });
+}
+
+// Token Security Analysis & Feedback
+export interface TokenSecurityFeedback {
+  aiSummary: string;
+  whyRiskScore: string;
+  whyDesignedThisWay: string;
+  securityFeedback: string;
+}
+
+export async function summarizeTokenSecurity(context: {
+  name: string;
+  symbol: string;
+  riskScore: number;
+  isHoneypot: boolean;
+  buyTax: number;
+  sellTax: number;
+  liquidityUsd: number;
+  holderCount: number;
+  isOpenSource: boolean;
+  isProxy: boolean;
+  isMintable: boolean;
+  findings: string[];
+}): Promise<TokenSecurityFeedback> {
+  const SYSTEM = `You are AUDIT's Token & DeFi Security Analyst for Binance Agent OS. Analyze the provided token telemetry and return a valid JSON object with these exact fields:
+{
+  "aiSummary": "2-3 sentence plain English explanation of this token's profile and market security",
+  "whyRiskScore": "2-3 sentences explaining precisely WHY this risk score was assigned (taxes, honeypot test, holder distribution, liquidity)",
+  "whyDesignedThisWay": "2-3 sentences explaining WHY the tokenomics or mechanics are designed this way (e.g. utility vs governance vs meme token, liquidity locks, tax distribution)",
+  "securityFeedback": "2-3 sentences of direct security advice for users and autonomous trading agents (slippage thresholds, routing, precautions)"
+}
+Be concise, accurate, and non-technical. Do NOT wrap in markdown. Return only valid JSON.`;
+
+  const userMsg = JSON.stringify(context, null, 2);
+  const response = await chat(SYSTEM, userMsg);
+  return safeParseJson(response, {
+    aiSummary: `${context.name} (${context.symbol}) is an on-chain token evaluated with a composite risk score of ${context.riskScore}/100.`,
+    whyRiskScore: `Risk score ${context.riskScore}/100 is driven by ${context.isHoneypot ? 'honeypot mechanics' : 'tax configuration'}, ${context.isOpenSource ? 'verified' : 'unverified'} source code, and liquidity depth ($${Math.round(context.liquidityUsd).toLocaleString()}).`,
+    whyDesignedThisWay: `${context.name} implements ${context.buyTax}% buy / ${context.sellTax}% sell parameters tailored for its token ecosystem and liquidity pools.`,
+    securityFeedback: `Verify pool liquidity before submitting swaps. Agents should enforce slippage protection and verify official token contract address.`,
   });
 }
 

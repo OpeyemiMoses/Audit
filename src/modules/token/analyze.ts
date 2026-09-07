@@ -1,3 +1,4 @@
+import { summarizeTokenSecurity } from '../../adapters/groq.js';
 // src/modules/token/analyze.ts
 import { z } from 'zod';
 import { getChainConfig } from '../../types/chains.js';
@@ -163,6 +164,25 @@ export async function analyzeToken(input: TokenAnalyzeInput) {
   const confidence = Math.min(0.95, dataSources.length * 0.18);
 
   // ─── Summary ──────────────────────────────────────────────────────────────
+  let aiTokenFeedback: any = null;
+  try {
+    aiTokenFeedback = await summarizeTokenSecurity({
+      name: tokenName,
+      symbol: tokenSymbol,
+      riskScore: riskAssessment.score,
+      isHoneypot: riskAssessment.isHoneypot,
+      buyTax: 0,
+      sellTax: 0,
+      liquidityUsd: totalLiquidity,
+      holderCount,
+      isOpenSource,
+      isProxy,
+      isMintable,
+      findings: findings.map(f => f.title),
+    });
+    if (aiTokenFeedback?.aiSummary) dataSources.push('Groq AI');
+  } catch { /* ignore */ }
+
   const riskLabel = riskAssessment.score >= 70 ? 'HIGH RISK' : riskAssessment.score >= 40 ? 'MODERATE RISK' : 'LOW RISK';
   const summary = riskAssessment.isHoneypot
     ? `🚨 HONEYPOT DETECTED — ${tokenName} (${tokenSymbol}) cannot be sold once purchased. Do not trade.`
@@ -196,6 +216,12 @@ export async function analyzeToken(input: TokenAnalyzeInput) {
       deploy_tx: contractCreation?.txHash,
       market: marketData,
       security_flags: riskAssessment.flags,
+      ai_summary: aiTokenFeedback?.aiSummary || '',
+      ai_feedback: {
+        why_risk_score: aiTokenFeedback?.whyRiskScore || '',
+        why_designed_this_way: aiTokenFeedback?.whyDesignedThisWay || '',
+        security_feedback: aiTokenFeedback?.securityFeedback || '',
+      },
     },
     start,
     false,

@@ -193,13 +193,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   }
 
   // â”€â”€â”€ AI Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  let aiSummary = { summary: '', purpose: '', keyFunctions: [] as string[] };
-  if (isVerified && (sourceCode.length > 0 || abiStr.length > 0)) {
-    aiSummary = await summarizeContract(contractName, sourceCode, abiStr);
-    if (aiSummary.summary) dataSources.push('Groq AI');
-  }
-
-  // â”€â”€â”€ Complexity score â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // --- Complexity score ---
   let complexityScore = 0;
   try {
     const abi = JSON.parse(abiStr) as unknown[];
@@ -207,7 +201,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
     complexityScore = Math.min(100, funcCount * 3);
   } catch { /* ignore */ }
 
-  // â”€â”€â”€ Risk scoring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // --- Risk scoring ---
   let riskScore = 0;
   if (!isVerified) riskScore += 15;
   if (isProxy) riskScore += 10;
@@ -216,11 +210,33 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   riskScore += riskAssessment.score * 0.3;
   riskScore = Math.min(100, riskScore);
 
-  // â”€â”€â”€ Recommendations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  if (!isVerified) recommendations.push('Source code is not verified â€” treat with extreme caution');
-  if (isProxy) recommendations.push('This is an upgradeable proxy â€” the behavior can change at any time. Monitor governance closely.');
-  if (hasSelfDestruct) recommendations.push('Contract can self-destruct â€” high counterparty risk if funds are stored here');
-  if (privilegedFunctions.length > 5) recommendations.push('Many privileged admin functions exist â€” understand who controls the owner key');
+  // --- AI Summary & Deep Feedback ---
+  let aiSummary: {
+    summary: string;
+    purpose: string;
+    keyFunctions: string[];
+    whyRiskScore?: string;
+    whyDesignedThisWay?: string;
+    securityFeedback?: string;
+  } = {
+    summary: '',
+    purpose: '',
+    keyFunctions: [],
+    whyRiskScore: '',
+    whyDesignedThisWay: '',
+    securityFeedback: '',
+  };
+
+  if (isVerified && (sourceCode.length > 0 || abiStr.length > 0)) {
+    aiSummary = await summarizeContract(contractName, sourceCode, abiStr, Math.round(riskScore), findings.map(f => f.title));
+    if (aiSummary.summary) dataSources.push('Groq AI');
+  }
+
+  // --- Recommendations ---
+  if (!isVerified) recommendations.push('Source code is not verified - treat with extreme caution');
+  if (isProxy) recommendations.push('This is an upgradeable proxy - the behavior can change at any time. Monitor governance closely.');
+  if (hasSelfDestruct) recommendations.push('Contract can self-destruct - high counterparty risk if funds are stored here');
+  if (privilegedFunctions.length > 5) recommendations.push('Many privileged admin functions exist - understand who controls the owner key');
   if (isVerified && riskScore < 30) recommendations.push('Source code is verified and risk signals are low');
 
   const confidence = Math.min(0.95, 0.25 + dataSources.length * 0.15 + (isVerified ? 0.2 : 0));
@@ -255,6 +271,11 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
       ai_summary: aiSummary.summary,
       ai_purpose: aiSummary.purpose,
       ai_key_functions: aiSummary.keyFunctions,
+      ai_feedback: {
+        why_risk_score: aiSummary.whyRiskScore,
+        why_designed_this_way: aiSummary.whyDesignedThisWay,
+        security_feedback: aiSummary.securityFeedback,
+      },
       security_flags: riskAssessment.flags,
     },
     start,
