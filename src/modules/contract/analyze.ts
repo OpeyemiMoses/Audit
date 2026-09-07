@@ -224,7 +224,8 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   if (isVerified && riskScore < 30) recommendations.push('Source code is verified and risk signals are low');
 
   const confidence = Math.min(0.95, 0.25 + dataSources.length * 0.15 + (isVerified ? 0.2 : 0));
-  const summary = `${contractName} on ${chainConfig.name}: ${isVerified ? 'Verified âœ“' : 'Unverified âš '} | ${privilegedFunctions.length} privileged functions | ${isProxy ? 'Upgradeable proxy' : 'Non-upgradeable'} | Risk: ${Math.round(riskScore)}/100${aiSummary.purpose ? ` â€” ${aiSummary.purpose}` : ''}`;
+  const purposeStr = (aiSummary.purpose && !aiSummary.purpose.includes('Unknown')) ? ` - ${aiSummary.purpose}` : '';
+  const summary = `${contractName} on ${chainConfig.name} is ${isVerified ? 'verified' : 'unverified'} with ${privilegedFunctions.length} privileged functions and ${isProxy ? 'upgradeable proxy architecture' : 'non-upgradeable bytecode'}. Risk score: ${Math.round(riskScore)}/100 (${riskScore > 65 ? 'High Risk' : riskScore > 30 ? 'Moderate Risk' : 'Low Risk'})${purposeStr}.`;
 
   const response = buildResponse(
     'contract/analyze',

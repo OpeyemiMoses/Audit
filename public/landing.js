@@ -217,43 +217,180 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return String(str ?? '');
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function renderGenericResult(container, data, title) {
     container.style.display = 'block';
     const risk = data.risk_score ?? 20;
+    const inner = data.data || {};
     let boxClass = 'verdict-box-allow';
     let verdictText = 'ALLOW';
+    let verdictExplanation = 'Low risk detected. On-chain telemetry and source code indicators meet standard safety benchmarks.';
 
     if (risk > 65) {
       boxClass = 'verdict-box-block';
       verdictText = 'BLOCK / HIGH RISK';
+      verdictExplanation = 'Critical vulnerabilities or high-risk flags identified. Interacting poses potential fund risk.';
     } else if (risk > 30) {
       boxClass = 'verdict-box-warn';
       verdictText = 'WARN / CAUTION';
+      verdictExplanation = 'Moderate risk factors present. Review security observations and recommendations before proceeding.';
     }
 
-    const findingsHtml = Array.isArray(data.findings) && data.findings.length > 0
-      ? data.findings.map(f => {
-        const detail = (f.description && f.description !== f.title) ? ` — ${f.description}` : '';
-        const cssClass = f.severity === 'info' ? 'info' : (f.severity === 'critical' || f.severity === 'high' ? 'danger' : '');
-        const prefix = f.severity === 'info' ? 'INFO' : 'FLAG';
-        return `<div class="finding-line ${cssClass}">${prefix}: [${f.severity?.toUpperCase() || 'WARN'}] ${f.title}${detail}</div>`;
-      }).join('')
-      : '<div class="finding-line success">STATUS: No critical vulnerability flags identified on-chain.</div>';
+    // 1. Natural Language Executive Summary
+    let summaryText = data.summary || 'Security inspection complete.';
+    summaryText = summaryText.replace(/\s*\|\s*/g, ' • ');
+    summaryText = summaryText.replace(/\s*—\s*Unknown purpose/gi, '');
+    summaryText = summaryText.replace(/\s*—\s*Unable to generate summary/gi, '');
+    summaryText = summaryText.replace(/âœ“/g, '✓').replace(/â€”/g, '—').replace(/âœ—/g, '✗');
+
+    // 2. Plain-English AI Intelligence & Purpose
+    let aiBlockHtml = '';
+    const hasAiSummary = inner.ai_summary && !inner.ai_summary.includes('Unable to generate') && inner.ai_summary.length > 5;
+    const hasAiPurpose = inner.ai_purpose && !inner.ai_purpose.includes('Unknown') && inner.ai_purpose.length > 3;
+    const hasWalletDesc = inner.wallet_description && inner.wallet_description.length > 5;
+    const hasTxExpl = inner.explanation && !inner.explanation.includes('not available');
+
+    if (hasAiSummary || hasAiPurpose || hasWalletDesc || hasTxExpl) {
+      aiBlockHtml = `
+        <div class="result-card ai-insight-card">
+          <div class="result-card-header">
+            <span class="card-badge ai-badge">GROQ AI INTELLIGENCE</span>
+            <span class="card-sub">PLAIN-ENGLISH AUDIT SYNTHESIS</span>
+          </div>
+          ${hasAiPurpose ? `<div class="insight-purpose"><strong>Primary Purpose:</strong> ${escapeHtml(inner.ai_purpose)}</div>` : ''}
+          ${hasAiSummary ? `<p class="insight-prose">${escapeHtml(inner.ai_summary)}</p>` : ''}
+          ${hasWalletDesc ? `<p class="insight-prose"><strong>Wallet Profile:</strong> ${escapeHtml(inner.wallet_description)}</p>` : ''}
+          ${hasTxExpl ? `<p class="insight-prose"><strong>Transaction Overview:</strong> ${escapeHtml(inner.explanation)}</p>` : ''}
+        </div>
+      `;
+    }
+
+    // 3. Human-Readable Key Specs Grid
+    const specItems = [];
+    if (inner.name) specItems.push({ label: 'TARGET / ASSET', val: `${inner.name} ${inner.symbol ? `(${inner.symbol})` : ''}` });
+    if (typeof inner.is_verified === 'boolean') specItems.push({ label: 'SOURCE CODE', val: inner.is_verified ? 'Verified ✓' : 'Unverified Bytecode ✗' });
+    if (typeof inner.is_proxy === 'boolean') specItems.push({ label: 'ARCHITECTURE', val: inner.is_proxy ? `Upgradeable Proxy (${inner.proxy_type || 'Custom'})` : 'Immutable / Non-upgradeable' });
+    if (typeof inner.function_count === 'number' || typeof inner.privileged_functions?.length === 'number') {
+      const pCount = inner.privileged_functions?.length ?? inner.function_count;
+      specItems.push({ label: 'ADMIN CONTROLS', val: pCount === 0 ? '0 Privileged Roles (Safe)' : `${pCount} Privileged Functions` });
+    }
+    if (inner.holder_count) specItems.push({ label: 'COMMUNITY', val: `${Number(inner.holder_count).toLocaleString()} Token Holders` });
+    if (inner.dex_liquidity_usd) specItems.push({ label: 'DEX LIQUIDITY', val: `$${Number(inner.dex_liquidity_usd).toLocaleString()}` });
+    if (inner.wallet_type) specItems.push({ label: 'WALLET PROFILE', val: inner.wallet_type.replace(/_/g, ' ').toUpperCase() });
+    if (inner.transaction_count !== undefined) specItems.push({ label: 'ACTIVITY', val: `${inner.transaction_count} Txs (${inner.wallet_age_days || 0}d old)` });
+    if (inner.balance_native !== undefined) specItems.push({ label: 'NATIVE BALANCE', val: `${inner.balance_native} ${inner.native_currency || 'BNB'}` });
+    if (inner.method_name) specItems.push({ label: 'METHOD', val: inner.method_name });
+
+    let specsHtml = '';
+    if (specItems.length > 0) {
+      specsHtml = `
+        <div class="result-specs-grid">
+          ${specItems.slice(0, 4).map(s => `
+            <div class="spec-card">
+              <div class="spec-label">${s.label}</div>
+              <div class="spec-val">${escapeHtml(s.val)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // 4. Readable Security Findings
+    let findingsHtml = '';
+    if (Array.isArray(data.findings) && data.findings.length > 0) {
+      findingsHtml = data.findings.map(f => {
+        const isInfo = f.severity === 'info';
+        const isDanger = f.severity === 'critical' || f.severity === 'high';
+        const tagClass = isDanger ? 'tag-danger' : (isInfo ? 'tag-info' : 'tag-warn');
+        const tagLabel = f.severity?.toUpperCase() || 'NOTE';
+        const desc = (f.description && f.description !== f.title) ? `<div class="finding-desc">${escapeHtml(f.description)}</div>` : '';
+        return `
+          <div class="readable-finding-item ${isDanger ? 'item-danger' : (isInfo ? 'item-info' : 'item-warn')}">
+            <div class="finding-top">
+              <span class="severity-badge ${tagClass}">${tagLabel}</span>
+              <span class="finding-title-text">${escapeHtml(f.title)}</span>
+            </div>
+            ${desc}
+          </div>
+        `;
+      }).join('');
+    } else {
+      findingsHtml = `
+        <div class="readable-finding-item item-clean">
+          <div class="finding-top">
+            <span class="severity-badge tag-allow">CLEAN</span>
+            <span class="finding-title-text">No critical vulnerability flags or honeypot indicators identified.</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // 5. Actionable Recommendations
+    let recommendationsHtml = '';
+    if (Array.isArray(data.recommendations) && data.recommendations.length > 0) {
+      recommendationsHtml = `
+        <div class="result-section">
+          <div class="section-label-bar">RECOMMENDED ACTIONS &amp; NEXT STEPS</div>
+          <div class="recommendations-list">
+            ${data.recommendations.map(r => `
+              <div class="rec-item">
+                <span class="rec-icon">✓</span>
+                <span class="rec-text">${escapeHtml(r)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
 
     container.innerHTML = `
-      <div class="verdict-header">
-        <div>
-          <div class="verdict-title">${title} // ${data.chain?.toUpperCase() || 'BNB CHAIN'}</div>
-          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 4px;">COMPOSITE RISK INDEX: ${risk} / 100</div>
+      <div class="verdict-banner ${boxClass}">
+        <div class="verdict-info">
+          <div class="verdict-title-row">
+            <span class="verdict-chain-tag">${escapeHtml((data.chain || 'bsc').toUpperCase())}</span>
+            <span class="verdict-target-name">${escapeHtml(title)}</span>
+          </div>
+          <div class="verdict-score-row">
+            COMPOSITE RISK SCORE: <strong>${risk} / 100</strong>
+            <span class="confidence-tag">Confidence: ${Math.round((data.confidence || 0.8) * 100)}%</span>
+          </div>
+          <div class="verdict-explanation">${verdictExplanation}</div>
         </div>
-        <span class="verdict-box ${boxClass}">${verdictText}</span>
+        <div class="verdict-badge-box">
+          <span class="verdict-badge ${boxClass}">${verdictText}</span>
+        </div>
       </div>
-      <p class="telemetry-summary"><strong>Executive Telemetry:</strong> ${data.summary || 'Inspection complete.'}</p>
-      <div class="telemetry-findings">${findingsHtml}</div>
-      <details style="margin-top: 14px; cursor: pointer;">
-        <summary style="font-family: var(--font-mono); font-size: 11px; color: var(--color-brand); margin-bottom: 8px;">[+] EXPAND RAW JSON TELEMETRY</summary>
-        <pre class="terminal-code"><code>${JSON.stringify(data, null, 2)}</code></pre>
-      </details>
+
+      <div class="result-body">
+        <div class="result-section">
+          <div class="section-label-bar">EXECUTIVE AUDIT SUMMARY</div>
+          <p class="executive-prose">${escapeHtml(summaryText)}</p>
+        </div>
+
+        ${aiBlockHtml}
+        ${specsHtml}
+
+        <div class="result-section">
+          <div class="section-label-bar">SECURITY OBSERVATIONS &amp; FINDINGS (${Array.isArray(data.findings) ? data.findings.length : 0})</div>
+          <div class="findings-container">${findingsHtml}</div>
+        </div>
+
+        ${recommendationsHtml}
+
+        <details class="raw-telemetry-expander">
+          <summary class="expander-toggle">▸ View Raw Developer &amp; Agent JSON Payload</summary>
+          <pre class="terminal-code"><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>
+        </details>
+      </div>
     `;
   }
 
@@ -264,25 +401,72 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rec.includes('HIGH') || rec.includes('BLOCK')) boxClass = 'verdict-box-block';
     else if (rec.includes('CAUTION') || rec.includes('INVESTIGATE')) boxClass = 'verdict-box-warn';
 
+    const nextSteps = data.data?.suggestedNextSteps || data.data?.suggested_next_steps || ['Verify liquidity depth before executing', 'Enforce strict slippage limits'];
+    const keyRisks = data.data?.keyRisks || [];
+    const keyStrengths = data.data?.keyStrengths || [];
+
     container.innerHTML = `
-      <div class="verdict-header">
-        <div>
-          <div class="verdict-title">GROQ AI DECISION SYNTHESIS</div>
-          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 4px;">MODEL: ${data.data?.ai_model || 'openai/gpt-oss-120b'} // LATENCY: ${data.metadata?.latency_ms || 804}ms</div>
+      <div class="verdict-banner ${boxClass}">
+        <div class="verdict-info">
+          <div class="verdict-title-row">
+            <span class="verdict-chain-tag">GROQ AI</span>
+            <span class="verdict-target-name">AUTONOMOUS DECISION SYNTHESIS</span>
+          </div>
+          <div class="verdict-score-row">
+            MODEL: <strong>${escapeHtml(data.data?.ai_model || 'openai/gpt-oss-120b')}</strong>
+            <span class="confidence-tag">Latency: ${data.metadata?.latency_ms || 804}ms</span>
+          </div>
+          <div class="verdict-explanation">Comprehensive risk vs. benefit tradeoff synthesis powered by Groq LPU reasoning engine.</div>
         </div>
-        <span class="verdict-box ${boxClass}">${rec.replace(/_/g, ' ')}</span>
-      </div>
-      <p class="telemetry-summary"><strong>AI Reasoning & Tradeoff Evaluation:</strong> ${data.data?.tradeoffs || data.summary}</p>
-      <div style="margin: 14px 0;">
-        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--color-brand); margin-bottom: 6px;">ENFORCEABLE NEXT STEPS:</div>
-        <div class="telemetry-findings">
-          ${(data.data?.suggested_next_steps || ['Enforce max slippage limit', 'Verify liquidity before executing']).map(s => `<div class="finding-line">ACTION: ${s}</div>`).join('')}
+        <div class="verdict-badge-box">
+          <span class="verdict-badge ${boxClass}">${escapeHtml(rec.replace(/_/g, ' '))}</span>
         </div>
       </div>
-      <details style="margin-top: 14px; cursor: pointer;">
-        <summary style="font-family: var(--font-mono); font-size: 11px; color: var(--color-brand); margin-bottom: 8px;">[+] EXPAND DECISION TELEMETRY</summary>
-        <pre class="terminal-code"><code>${JSON.stringify(data, null, 2)}</code></pre>
-      </details>
+
+      <div class="result-body">
+        <div class="result-section">
+          <div class="section-label-bar">AI REASONING &amp; TRADEOFF EVALUATION</div>
+          <p class="executive-prose">${escapeHtml(data.data?.tradeoffs || data.summary)}</p>
+        </div>
+
+        ${keyRisks.length > 0 || keyStrengths.length > 0 ? `
+          <div class="result-specs-grid">
+            ${keyStrengths.length > 0 ? `
+              <div class="spec-card" style="border-left: 3px solid var(--color-allow);">
+                <div class="spec-label">KEY STRENGTHS</div>
+                <div class="spec-val" style="font-size: 12px; font-weight: normal; color: var(--text-main); margin-top: 4px;">
+                  ${keyStrengths.map(s => `• ${escapeHtml(s)}`).join('<br>')}
+                </div>
+              </div>
+            ` : ''}
+            ${keyRisks.length > 0 ? `
+              <div class="spec-card" style="border-left: 3px solid var(--color-block);">
+                <div class="spec-label">KEY RISKS</div>
+                <div class="spec-val" style="font-size: 12px; font-weight: normal; color: var(--text-main); margin-top: 4px;">
+                  ${keyRisks.map(r => `• ${escapeHtml(r)}`).join('<br>')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
+        <div class="result-section">
+          <div class="section-label-bar">ENFORCEABLE AGENT ACTIONS &amp; NEXT STEPS</div>
+          <div class="recommendations-list">
+            ${nextSteps.map(s => `
+              <div class="rec-item">
+                <span class="rec-icon">✓</span>
+                <span class="rec-text">${escapeHtml(s)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <details class="raw-telemetry-expander">
+          <summary class="expander-toggle">▸ View Raw Decision Telemetry</summary>
+          <pre class="terminal-code"><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>
+        </details>
+      </div>
     `;
   }
 
