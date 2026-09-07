@@ -1,12 +1,12 @@
 ﻿# Contributing to AUDIT
 
-Thank you for your interest in contributing to **AUDIT — Intelligence & Security Layer for Binance Agent OS**!
+Thank you for your interest in contributing to AUDIT — Intelligence & Security Layer for Binance Agent OS.
 
 We welcome all contributions, including bug reports, new MCP tool integrations, adapter enhancements, documentation improvements, and performance optimizations.
 
 ---
 
-## 🛠️ Development Setup
+## 1. Development Setup
 
 ### 1. Fork & Clone
 ```bash
@@ -32,10 +32,10 @@ npm run dev
 
 ---
 
-## 📜 Contribution Guidelines
+## 2. Contribution Guidelines
 
 ### 1. Code Standards & Style
-- Write clean, well-documented **TypeScript**.
+- Write clean, well-documented TypeScript.
 - Ensure all types are strictly defined; avoid using `any` wherever possible.
 - Run `npm run lint` or `npx tsc --noEmit` before submitting changes to verify type safety.
 - Follow existing patterns for adapters (`src/adapters/`) and module analyzers (`src/modules/`).
@@ -55,16 +55,16 @@ Use Conventional Commits:
 
 ---
 
-## 🔄 Pull Request Process
+## 3. Pull Request Process
 
 1. Create your feature branch from `main`.
-2. Ensure your changes compile with `npm run build` with **0 errors**.
+2. Ensure your changes compile with `npm run build` with 0 TypeScript errors.
 3. Update relevant documentation in `README.md` if adding or changing MCP tools or endpoints.
 4. Open a Pull Request referencing any related issues.
 5. Provide a clear summary of what your PR introduces and how you verified it.
 
 ---
 
-## 💬 Questions & Support
+## 4. Questions & Support
 
 Feel free to open a [GitHub Discussion](https://github.com/OpeyemiMoses/Audit/discussions) or submit an [Issue](https://github.com/OpeyemiMoses/Audit/issues).

@@ -4,61 +4,61 @@
 > **Track A: Agent Creation** ($20,000 USDC Prize Pool)  
 > **Themes:** Trading Workflows, Data Analysis, and Onchain Security
 
-[![Binance Agent OS](https://img.shields.io/badge/Binance-Agent%20OS-F0B90B?style=for-the-badge&logo=binance&logoColor=black)](https://developers.binance.com)
-[![Model Context Protocol](https://img.shields.io/badge/Protocol-MCP%20Native-blue?style=for-the-badge)](https://modelcontextprotocol.io)
-[![Groq AI](https://img.shields.io/badge/AI%20Reasoning-Groq%20Llama%203.3%20%2F%20GPT--OSS-orange?style=for-the-badge)](https://groq.com)
-[![BNB Chain](https://img.shields.io/badge/Chains-BNB%20%7C%20opBNB%20%7C%20EVM-yellow?style=for-the-badge)](https://bnbchain.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Binance Agent OS](https://img.shields.io/badge/Binance-Agent%20OS-F0B90B?style=flat-square&logo=binance&logoColor=black)](https://developers.binance.com)
+[![Model Context Protocol](https://img.shields.io/badge/Protocol-MCP%20Native-blue?style=flat-square)](https://modelcontextprotocol.io)
+[![Groq AI](https://img.shields.io/badge/AI%20Reasoning-Groq%20Llama%203.3%20%2F%20GPT--OSS-orange?style=flat-square)](https://groq.com)
+[![BNB Chain](https://img.shields.io/badge/Chains-BNB%20%7C%20opBNB%20%7C%20EVM-yellow?style=flat-square)](https://bnbchain.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
 ---
 
-## 📌 Project Overview & Goals
+## 1. Project Overview & Goals
 
-**AUDIT** is an autonomous intelligence, security verification, and risk-evaluation layer purpose-built for the **Binance Agent OS** and **Model Context Protocol (MCP)**.
+AUDIT is an autonomous intelligence, security verification, and risk-evaluation layer purpose-built for the **Binance Agent OS** and the **Model Context Protocol (MCP)**.
 
 ### The Problem
-Autonomous AI agents executing trades, yield strategies, and on-chain actions in crypto face catastrophic operational risks:
-1. **Malicious Tokens & Honeypots**: Agents can unknowingly buy un-sellable tokens with 100% sell taxes or blacklist traps.
-2. **Unverified Smart Contracts & Drainers**: Agents interacting with unverified or proxy drainer contracts can lose sub-account funds.
-3. **Liquidity & Slippage Traps**: Large automated swaps on shallow DEX pools suffer severe impermanent loss and sandwich attacks.
-4. **Lack of Enforceable AI Guards**: Existing AI frameworks lack a verifiable pre-flight security check before trade execution.
+Autonomous AI agents executing trades, yield strategies, and on-chain interactions face critical operational vulnerabilities:
+1. **Malicious Tokens & Honeypots**: Agents can buy un-sellable tokens with 100% sell taxes or blacklist functions.
+2. **Unverified Smart Contracts & Drainers**: Interacting with proxy drainer contracts can deplete sub-account funds.
+3. **Liquidity & Slippage Traps**: Automated swaps on low-depth DEX pools suffer severe impermanent loss and sandwich attacks.
+4. **Absence of Enforceable Pre-Flight Guards**: Existing agent frameworks lack a verifiable risk check before trade execution.
 
-### The Solution: AUDIT
-AUDIT solves this by providing AI agents with **9 specialized Model Context Protocol (MCP) tools** and REST endpoints. Before an agent executes any action on Binance or BNB Chain, it calls AUDIT to verify security telemetry, query live market depth, and receive a deterministic **`ALLOW`**, **`WARN`**, or **`BLOCK`** verdict synthesized by **Groq AI (120B / Llama 3.3)** in under 800ms.
-
----
-
-## 🏛️ System Architecture
-
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        Binance Agent OS / AI Agent Client                              │
-│                    (Claude Desktop / Cursor / Grok / AutoGen Agent)                    │
-└───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                            │ Model Context Protocol (MCP) / REST
-                                            ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                          AUDIT Intelligence & Security Engine                          │
-│                                [ mcp-server.ts ]                                       │
-│                                                                                        │
-│   ┌─────────────────────┐   ┌────────────────────────┐   ┌─────────────────────────┐   │
-│   │ Token & Contract    │   │ Transaction Simulator  │   │ AI Decision Engine      │   │
-│   │ Risk Scoring        │   │ & Drainer Detector     │   │ (ALLOW / WARN / BLOCK)  │   │
-│   └──────────┬──────────┘   └───────────┬────────────┘   └────────────┬────────────┘   │
-└──────────────┼──────────────────────────┼─────────────────────────────┼────────────────┘
-               │                          │                             │
-               ▼                          ▼                             ▼
-┌──────────────────────────┐ ┌───────────────────────────┐ ┌─────────────────────────────┐
-│    BNB Chain & EVM       │ │     Binance Market Data   │ │       Groq AI Reasoning     │
-│  - BscScan / opBNB RPC   │ │  - 24h Ticker & Volume    │ │  - openai/gpt-oss-120b      │
-│  - GoPlus Security API   │ │  - Order Book Imbalance   │ │  - llama-3.3-70b-versatile  │
-│  - DeFiLlama Protocol TVL│ │  - Perp Funding Rates     │ │  - Sub-second risk synthesis│
-└──────────────────────────┘ └───────────────────────────┘ └─────────────────────────────┘
-```
+### The Solution
+AUDIT provides AI agents with **9 specialized Model Context Protocol (MCP) tools** and REST endpoints. Before an agent executes any action on Binance or BNB Chain, it calls AUDIT to verify security telemetry, query live market depth, and receive a deterministic **`ALLOW`**, **`WARN`**, or **`BLOCK`** verdict synthesized by **Groq AI (120B / Llama 3.3)** in under 800ms.
 
 ---
 
-## 🛠️ The 9 Native MCP Tools
+## 2. System Architecture
+
+```
++----------------------------------------------------------------------------------------+
+|                        Binance Agent OS / AI Agent Client                              |
+|                    (Claude Desktop / Cursor / Grok / AutoGen Agent)                    |
++-------------------------------------------+--------------------------------------------+
+                                            | Model Context Protocol (MCP) / REST
+                                            v
++----------------------------------------------------------------------------------------+
+|                          AUDIT Intelligence & Security Engine                          |
+|                                [ mcp-server.ts ]                                       |
+|                                                                                        |
+|   +---------------------+   +------------------------+   +-------------------------+   |
+|   | Token & Contract    |   | Transaction Simulator  |   | AI Decision Engine      |   |
+|   | Risk Scoring        |   | & Drainer Detector     |   | (ALLOW / WARN / BLOCK)  |   |
+|   +----------+----------+   +-----------+------------+   +------------+------------+   |
++--------------+--------------------------+-----------------------------+----------------+
+               |                          |                             |
+               v                          v                             v
++--------------------------+ +---------------------------+ +-----------------------------+
+|    BNB Chain & EVM       | |     Binance Market Data   | |       Groq AI Reasoning     |
+|  - BscScan / opBNB RPC   | |  - 24h Ticker & Volume    | |  - openai/gpt-oss-120b      |
+|  - GoPlus Security API   | |  - Order Book Imbalance   | |  - llama-3.3-70b-versatile  |
+|  - DeFiLlama Protocol TVL| |  - Perp Funding Rates     | |  - Sub-second risk synthesis|
++--------------------------+ +---------------------------+ +-----------------------------+
+```
+
+---
+
+## 3. The 9 Native MCP Tools
 
 AUDIT natively implements the **Model Context Protocol (MCP)** specification. Any Agent OS client discovers these tools automatically:
 
@@ -76,12 +76,12 @@ AUDIT natively implements the **Model Context Protocol (MCP)** specification. An
 
 ---
 
-## 🚀 Quick Start & Replication Guide
+## 4. Quick Start & Replication Guide
 
 ### 1. Prerequisites
 - **Node.js**: v18.0.0 or higher
 - **npm**: v9.0.0 or higher
-- **Groq API Key**: (Get a free key from [console.groq.com](https://console.groq.com))
+- **Groq API Key**: (Available at [console.groq.com](https://console.groq.com))
 
 ---
 
@@ -128,7 +128,7 @@ npm run dev
 npm run build
 npm start
 ```
-Open **`http://localhost:4000`** in your browser to access the live interactive dashboard.
+Open **`http://localhost:4000`** in your browser to access the live interactive terminal.
 
 #### Mode B: Start the Binance Agent OS MCP Server
 ```bash
@@ -138,7 +138,7 @@ The server runs over `stdio` using the standard Model Context Protocol.
 
 ---
 
-## 🔌 Connecting to Claude Desktop / Cursor
+## 5. Connecting to Claude Desktop / Cursor
 
 To allow Claude or Cursor agents to use AUDIT tools directly, add this to your `claude_desktop_config.json` or Cursor MCP settings:
 
@@ -158,13 +158,13 @@ To allow Claude or Cursor agents to use AUDIT tools directly, add this to your `
 ```
 
 ### Example Agent Interaction
-> **User to Agent:** *"Analyze token `0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82` on BNB Chain and tell me if it's safe to execute a $5,000 swap on PancakeSwap."*
+> **User to Agent:** *"Analyze token `0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82` on BNB Chain and tell me if it is safe to execute a $5,000 swap on PancakeSwap."*
 >
-> **Agent:** *Calls `audit_token` and `evaluate_agent_decision` via AUDIT MCP Server → Ingests security findings and liquidity depth → Returns structured verdict:* **`ALLOW (Confidence: 88%)`** *with max slippage recommendations.*
+> **Agent:** *Calls `audit_token` and `evaluate_agent_decision` via AUDIT MCP Server -> Ingests security findings and liquidity depth -> Returns structured verdict:* **`ALLOW (Confidence: 88%)`** *with max slippage recommendations.*
 
 ---
 
-## 📡 Sample REST API Query
+## 6. Sample REST API Query
 
 ### Evaluate Agent Trade Intent (`POST /decision/evaluate`)
 ```bash
@@ -209,9 +209,9 @@ curl -X POST http://localhost:4000/decision/evaluate \
 
 ---
 
-## 🌐 Supported Blockchains
+## 7. Supported Blockchains
 
-- **BNB Smart Chain (BSC)** (`chainId: 56`) — *Primary Default*
+- **BNB Smart Chain (BSC)** (`chainId: 56`) — Primary Default
 - **opBNB Mainnet** (`chainId: 204`)
 - **BNB Smart Chain Testnet** (`chainId: 97`)
 - **Ethereum Mainnet** (`chainId: 1`)
@@ -221,14 +221,15 @@ curl -X POST http://localhost:4000/decision/evaluate \
 
 ---
 
-## 📂 Project Structure
+## 8. Project Structure
 
 ```
 audit/
 ├── public/                     # Web Dashboard & Interactive Terminal
-│   ├── index.html              # Binance-themed UI
+│   ├── index.html              # Clean UI
 │   ├── landing.css             # Stylesheet
-│   └── landing.js              # Client-side interactivity
+│   ├── landing.js              # Client-side interactivity
+│   └── hero-server.jpg         # Infrastructure photography
 ├── src/
 │   ├── adapters/               # Data & AI Adapters
 │   │   ├── binance.ts          # Binance 24h ticker & funding rates
@@ -259,15 +260,15 @@ audit/
 
 ---
 
-## 🤝 Contributing & Community
+## 9. Contributing & Governance
 
-We welcome contributions from the Binance and AI developer communities. Please review:
+Contributions are welcome from the Binance and AI developer communities:
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
 
 ---
 
-## 📄 License
+## 10. License
 
 This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
