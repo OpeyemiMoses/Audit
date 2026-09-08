@@ -254,8 +254,11 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
       isVerified,
       isProxy,
       privilegedCount: privilegedFunctions.length,
+      privilegedFunctions: privilegedFunctions.slice(0, 10).map(p => p.name),
       compiler,
       bytecodeLength: contractBytes ? Math.round(contractBytes.length / 2) : 0,
+      findings: findings.map(f => f.title),
+      targetType: 'contract',
     });
   } catch { /* ignore */ }
 

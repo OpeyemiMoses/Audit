@@ -2185,3 +2185,34 @@ html, body {
   font-weight: 600;
   color: var(--text-primary);
 }
+
+/* Hairline SVG icon styling */
+.header-svg-icon, .quad-svg-icon, .matrix-svg-icon, .telemetry-svg-icon, .specs-svg-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: -2px;
+  color: var(--text-secondary);
+}
+
+.section-title-with-icon, .card-header-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quad-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.matrix-header, .telemetry-header, .specs-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cleared-icon-circle svg {
+  display: block;
+}

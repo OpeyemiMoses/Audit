@@ -200,9 +200,15 @@ export async function analyzeToken(input: TokenAnalyzeInput) {
       isVerified: isOpenSource,
       isProxy,
       isHoneypot: riskAssessment.isHoneypot,
+      isMintable,
       privilegedCount: 0,
       liquidityUsd: totalLiquidity,
       holders: holderCount,
+      top10HoldersPct: parseFloat(top10HoldersPct.toFixed(2)),
+      totalSupply,
+      dexes: dexData.map(d => `${d.name} (${Math.round(parseFloat(d.liquidity || '0')).toLocaleString()})`),
+      findings: findings.map(f => f.title),
+      targetType: 'token',
     });
   } catch { /* ignore */ }
 
