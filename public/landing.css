@@ -1638,3 +1638,550 @@ html, body {
     opacity: 0;
   }
 }
+
+
+/* ========================================================
+   EXACT PROTOCOL & TOKEN AUDITOR CARDS (User Screenshots)
+   ======================================================== */
+
+.audit-report-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* 1. Asset Title & Header Badges */
+.report-title-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.report-header-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.report-asset-name {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.report-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.report-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-sharp);
+  border: 1px solid var(--border-hairline);
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.report-tag.tag-verified, .report-tag.tag-audited {
+  background-color: #ECFDF5;
+  border-color: #A7F3D0;
+  color: #059669;
+}
+
+.report-addr-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.report-explorer-link {
+  color: #2563EB;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 500;
+}
+.report-explorer-link:hover {
+  text-decoration: underline;
+}
+
+/* 2. Cleared for Interaction Banner */
+.cleared-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background-color: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: var(--radius-sm);
+}
+
+.cleared-banner.warn {
+  background-color: #FFFBEB;
+  border-color: #FDE68A;
+}
+
+.cleared-banner.block {
+  background-color: #FEF2F2;
+  border-color: #FECACA;
+}
+
+.cleared-icon-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #059669;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.cleared-banner.warn .cleared-icon-circle {
+  background-color: #D97706;
+}
+
+.cleared-banner.block .cleared-icon-circle {
+  background-color: #DC2626;
+}
+
+.cleared-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cleared-title {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: #065F46;
+  letter-spacing: 0.5px;
+}
+
+.cleared-banner.warn .cleared-title {
+  color: #92400E;
+}
+
+.cleared-banner.block .cleared-title {
+  color: #991B1B;
+}
+
+.cleared-sub {
+  font-size: 12px;
+  color: #047857;
+}
+
+.cleared-banner.warn .cleared-sub {
+  color: #B45309;
+}
+
+.cleared-banner.block .cleared-sub {
+  color: #B91C1C;
+}
+
+/* 3. Health Score Metric Strip */
+.health-strip-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.health-score-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}
+
+.health-score-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.health-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.health-num {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-allow);
+}
+.health-num.warn { color: var(--color-warn); }
+.health-num.block { color: var(--color-block); }
+
+.health-bar-track {
+  height: 4px;
+  width: 100%;
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-sharp);
+  overflow: hidden;
+}
+
+.health-bar-fill {
+  height: 100%;
+  background-color: var(--color-allow);
+  border-radius: var(--radius-sharp);
+}
+.health-bar-fill.warn { background-color: var(--color-warn); }
+.health-bar-fill.block { background-color: var(--color-block); }
+
+.health-sub {
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+
+.health-metrics-group {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.h-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.h-metric-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.h-metric-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sharp);
+  width: fit-content;
+}
+
+.h-metric-val.green {
+  background-color: #ECFDF5;
+  color: #059669;
+}
+
+.h-metric-val.gray {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+/* 4. Risk Flags Row */
+.risk-flags-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flags-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.flag-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.flag-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sharp);
+  background-color: #EFF6FF;
+  color: #2563EB;
+}
+.flag-badge.danger { background-color: #FEF2F2; color: #DC2626; }
+.flag-badge.warn { background-color: #FFFBEB; color: #D97706; }
+
+/* 5. Deep AI Protocol Reasoning & Intelligence Header */
+.ai-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.ai-section-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.live-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #059669;
+  letter-spacing: 0.5px;
+}
+
+/* 6. 4-Column Deep Intelligence Cards */
+.ai-cards-quad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .ai-cards-quad {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .ai-cards-quad {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ai-quad-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quad-card-header {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--border-hairline);
+  padding-bottom: 8px;
+}
+
+.quad-rows-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quad-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 11.5px;
+  gap: 8px;
+}
+
+.quad-key {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.quad-val {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+  line-height: 1.35;
+}
+
+/* 7. Exploit Vector Assessment Matrix */
+.exploit-matrix-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.exploit-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .exploit-matrix-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .exploit-matrix-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exploit-col {
+  background-color: #FAFAFA;
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sharp);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exploit-col-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exploit-name {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.exploit-pill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: var(--radius-sharp);
+}
+.exploit-pill.low { background-color: #ECFDF5; color: #059669; }
+.exploit-pill.medium { background-color: #FFFBEB; color: #D97706; }
+.exploit-pill.high { background-color: #FEF2F2; color: #DC2626; }
+
+.exploit-desc {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+/* 8. Actionable Telemetry Card */
+.actionable-telemetry-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.telemetry-bullets-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 2px;
+}
+
+.telemetry-bullet-item {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 14px;
+}
+.telemetry-bullet-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+.telemetry-bullet-item strong {
+  color: var(--text-primary);
+}
+
+/* 9. Smart Contract Specifications Strip */
+.specs-bottom-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.specs-grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 860px) {
+  .specs-grid-5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.spec-item-v {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spec-item-v .spec-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.spec-item-v .spec-content {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}

@@ -5,7 +5,7 @@ import { buildResponse, Finding, Evidence } from '../../types/response.js';
 import { getContractSource, getContractABI, getContractCreation } from '../../adapters/etherscan.js';
 import { getContractSecurity, assessTokenRisk } from '../../adapters/goplus.js';
 import { isContract, getCode } from '../../adapters/alchemy.js';
-import { summarizeContract } from '../../adapters/groq.js';
+import { summarizeContract, generateProtocolIntelligence } from '../../adapters/groq.js';
 import cache from '../../lib/cache.js';
 import logger from '../../lib/logger.js';
 
@@ -100,7 +100,9 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
   // Verify it's actually a contract
   const isActualContract = contractBytes !== '0x' && contractBytes.length > 2;
   if (!isActualContract) {
-    const response = buildResponse(
+  
+
+  const response = buildResponse(
       'contract/analyze', chain, chainConfig.id,
       `Address ${address.slice(0, 8)}... is not a smart contract on ${chainConfig.name} â€” it is an externally owned account (EOA).`,
       0, 0.99, [{ id: 'not_contract', severity: 'info', title: 'Not a contract', description: 'This address has no deployed bytecode â€” it is a wallet, not a contract.', source: 'Alchemy' }],
@@ -241,6 +243,22 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
 
   const confidence = Math.min(0.95, 0.25 + dataSources.length * 0.15 + (isVerified ? 0.2 : 0));
   const purposeStr = (aiSummary.purpose && !aiSummary.purpose.includes('Unknown')) ? ` - ${aiSummary.purpose}` : '';
+  // --- Generate Full Protocol Intelligence Cards (Screenshot layout) ---
+  let protocolIntelligence: any = null;
+  try {
+    protocolIntelligence = await generateProtocolIntelligence({
+      name: contractName,
+      address,
+      chain,
+      riskScore: Math.round(riskScore),
+      isVerified,
+      isProxy,
+      privilegedCount: privilegedFunctions.length,
+      compiler,
+      bytecodeLength: contractBytes ? Math.round(contractBytes.length / 2) : 0,
+    });
+  } catch { /* ignore */ }
+
   const summary = `${contractName} on ${chainConfig.name} is ${isVerified ? 'verified' : 'unverified'} with ${privilegedFunctions.length} privileged functions and ${isProxy ? 'upgradeable proxy architecture' : 'non-upgradeable bytecode'}. Risk score: ${Math.round(riskScore)}/100 (${riskScore > 65 ? 'High Risk' : riskScore > 30 ? 'Moderate Risk' : 'Low Risk'})${purposeStr}.`;
 
   const response = buildResponse(
@@ -277,6 +295,7 @@ export async function analyzeContract(input: ContractAnalyzeInput) {
         security_feedback: aiSummary.securityFeedback,
       },
       security_flags: riskAssessment.flags,
+      protocol_intelligence: protocolIntelligence,
     },
     start,
     false,

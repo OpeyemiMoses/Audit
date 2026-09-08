@@ -1,4 +1,4 @@
-import { summarizeTokenSecurity } from '../../adapters/groq.js';
+import { summarizeTokenSecurity, generateProtocolIntelligence } from '../../adapters/groq.js';
 // src/modules/token/analyze.ts
 import { z } from 'zod';
 import { getChainConfig } from '../../types/chains.js';
@@ -188,6 +188,24 @@ export async function analyzeToken(input: TokenAnalyzeInput) {
     ? `🚨 HONEYPOT DETECTED — ${tokenName} (${tokenSymbol}) cannot be sold once purchased. Do not trade.`
     : `${tokenName} (${tokenSymbol}) on ${chainConfig.name}: ${riskLabel} (score ${riskAssessment.score}/100). ${findings.length} risk signal(s) detected. ${holderCount > 0 ? `${holderCount.toLocaleString()} holders` : ''}.`;
 
+  // --- Generate Full Protocol Intelligence Cards (Screenshot layout) ---
+  let protocolIntelligence: any = null;
+  try {
+    protocolIntelligence = await generateProtocolIntelligence({
+      name: tokenName,
+      symbol: tokenSymbol,
+      address,
+      chain,
+      riskScore: Math.round(riskAssessment.score),
+      isVerified: isOpenSource,
+      isProxy,
+      isHoneypot: riskAssessment.isHoneypot,
+      privilegedCount: 0,
+      liquidityUsd: totalLiquidity,
+      holders: holderCount,
+    });
+  } catch { /* ignore */ }
+
   const response = buildResponse(
     'token/analyze',
     chain,
@@ -216,6 +234,7 @@ export async function analyzeToken(input: TokenAnalyzeInput) {
       deploy_tx: contractCreation?.txHash,
       market: marketData,
       security_flags: riskAssessment.flags,
+      protocol_intelligence: protocolIntelligence,
       ai_summary: aiTokenFeedback?.aiSummary || '',
       ai_feedback: {
         why_risk_score: aiTokenFeedback?.whyRiskScore || '',
