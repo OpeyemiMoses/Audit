@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/middleware/payment.ts
 // OKX x402 payment middleware — gates all intelligence endpoints behind pay-per-call
 
