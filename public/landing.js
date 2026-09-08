@@ -1505,185 +1505,63 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  function renderMarketResult(container, resData) {
+function renderMarketResult(container, resData) {
     container.style.display = 'block';
-    const data = resData.data || resData;
+    const data = (resData && resData.data) ? resData.data : (resData || {});
     const sym = data.symbol || 'BNBUSDT';
-    const lastPrice = data.lastPrice !== undefined ? Number(data.lastPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : '---';
-    const chg = data.priceChange24hPercent !== undefined ? data.priceChange24hPercent : 0;
+    const lastPrice = data.lastPrice !== undefined
+      ? Number(data.lastPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })
+      : '---';
+    const chg = data.priceChange24hPercent !== undefined ? Number(data.priceChange24hPercent) : 0;
     const isUp = chg >= 0;
-    const high = data.high24h !== undefined ? Number(data.high24h).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '---';
-    const low = data.low24h !== undefined ? Number(data.low24h).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '---';
-    const vol = data.volume24hUSD ? '
-
-  function renderUnifiedResult(container, data) {
-    const mod = data.module || '';
-    const inner = data.data || {};
-    if (mod.includes('token') || inner.symbol || inner.is_honeypot !== undefined) {
-      renderTokenAudit(container, data);
-    } else if (mod.includes('wallet')) {
-      renderWalletResult(container, data);
-    } else if (mod.includes('tx') || mod.includes('transaction')) {
-      renderTxSimulationResult(container, data);
-    } else {
-      renderContractAudit(container, data);
-    }
-  }
-
-  function renderLoading(container, message) {
-    container.style.display = 'block';
-    container.innerHTML = '<div class="loading-box"><span class="header-svg-icon">' + svgIcon('activity', 16) + '</span> ' + escapeHtml(message) + '</div>';
-  }
-
-  function renderError(container, message) {
-    container.style.display = 'block';
-    container.innerHTML = '<div class="cleared-banner block"><div class="cleared-icon-circle">' + svgIcon('x', 16) + '</div><div class="cleared-content"><div class="cleared-title">INSPECTION ERROR</div><div class="cleared-sub">' + escapeHtml(message) + '</div></div></div>';
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  // ==========================================
-  // ON-SCROLL BLUR-TO-POP REVEAL OBSERVER
-  // ==========================================
-  function initScrollReveal() {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -40px 0px',
-      threshold: 0.10,
-    };
-
-    const revealObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const SELECTORS = [
-      // Landing Page Elements
-      '.modules-overview-section .section-lead-wrapper',
-      '.modules-tri-grid .feature-card',
-      '.wide-callout-section .callout-card',
-      '.bottom-info-section .info-col',
-      '.editorial-footer .footer-top',
-      '.editorial-footer .footer-bottom',
-
-      // Console Elements
-      '.workspace-heading',
-      '.form-row',
-      '.preset-strip',
-      '.report-title-strip',
-      '.cleared-banner',
-      '.health-strip-card',
-      '.risk-flags-section',
-      '.deep-ai-section',
-      '.ai-cards-quad .quad-card',
-      '.exploit-matrix-card',
-      '.actionable-telemetry-card',
-      '.specs-bottom-card',
-
-      // Docs & Help Elements
-      '.doc-section',
-      '.help-category-card',
-      '.faq-item'
-    ];
-
-    function scanAndObserve() {
-      // 1. Initial Hero Pop
-      const heroEls = document.querySelectorAll('.hero-left, .mockup-window');
-      heroEls.forEach((el, i) => {
-        if (!el.classList.contains('scroll-reveal')) {
-          el.classList.add('scroll-reveal');
-          setTimeout(() => {
-            el.classList.add('is-revealed');
-          }, 100 + i * 150);
-        }
-      });
-
-      // 2. All Scroll Reveal Elements
-      const elements = document.querySelectorAll(SELECTORS.join(', '));
-      elements.forEach(el => {
-        if (!el.classList.contains('scroll-reveal')) {
-          el.classList.add('scroll-reveal');
-          // If element is already below the viewport, observe it for scroll reveal
-          const rect = el.getBoundingClientRect();
-          if (rect.top >= window.innerHeight) {
-            revealObserver.observe(el);
-          } else if (rect.top > 0 && rect.bottom <= window.innerHeight) {
-            // Visible on screen now, pop it
-            setTimeout(() => {
-              el.classList.add('is-revealed');
-            }, 80);
-          } else {
-            revealObserver.observe(el);
-          }
-        }
-      });
-    }
-
-    // Run on load
-    scanAndObserve();
-
-    // Re-check on scroll
-    window.addEventListener('scroll', scanAndObserve, { passive: true });
-
-    // Watch for tab switching / DOM updates
-    const appContainer = document.getElementById('app-container') || document.body;
-    const domObserver = new MutationObserver(() => {
-      scanAndObserve();
-    });
-    domObserver.observe(appContainer, { childList: true, subtree: true });
-  }
-
-  // Trigger on init
-  initScrollReveal();
-});
- + Math.round(data.volume24hUSD).toLocaleString() : '---';
+    const high = data.high24h !== undefined
+      ? Number(data.high24h).toLocaleString(undefined, { minimumFractionDigits: 2 })
+      : '---';
+    const low = data.low24h !== undefined
+      ? Number(data.low24h).toLocaleString(undefined, { minimumFractionDigits: 2 })
+      : '---';
+    const vol = data.volume24hUSD
+      ? '$' + Math.round(Number(data.volume24hUSD)).toLocaleString()
+      : '---';
 
     const ob = data.orderBook || {};
-    const bidDepth = ob.bidDepthUSD || 0;
-    const askDepth = ob.askDepthUSD || 0;
+    const bidDepth = Number(ob.bidDepthUSD || 0);
+    const askDepth = Number(ob.askDepthUSD || 0);
     const totalDepth = bidDepth + askDepth || 1;
-    const bidPct = Math.round((bidDepth / totalDepth) * 100);
+    const bidPct = Math.min(100, Math.max(0, Math.round((bidDepth / totalDepth) * 100)));
     const askPct = 100 - bidPct;
-    const spreadPct = ob.spreadPercent !== undefined ? ob.spreadPercent.toFixed(3) + '%' : '0.05%';
+    const spreadPct = ob.spreadPercent !== undefined
+      ? Number(ob.spreadPercent).toFixed(3) + '%'
+      : '0.001%';
     const imbalanceDesc = ob.depthImbalance || 'Balanced Orderbook';
 
-    const regime = (data.marketRegime || 'NEUTRAL').toUpperCase().replace('_', ' ');
+    const rawRegime = data.marketRegime || 'neutral';
+    const regime = rawRegime.toUpperCase().replace(/_/g, ' ');
 
-    // Render Bids & Asks preview
     const bids = Array.isArray(ob.bids) ? ob.bids.slice(0, 5) : [];
     const asks = Array.isArray(ob.asks) ? ob.asks.slice(0, 5) : [];
+
+    const fundingRateStr = data.fundingRate
+      ? (data.fundingRate.annualizedPercent !== undefined ? data.fundingRate.annualizedPercent.toFixed(2) + '% APR' : 'Neutral')
+      : 'Spot Market Active';
 
     container.innerHTML = `
       <div class="audit-report-wrapper">
         <div class="report-title-strip">
-          <div class="report-eyebrow">BINANCE ORDERBOOK &bull; REAL-TIME MARKET DEPTH</div>
+          <div class="report-eyebrow">BINANCE SPOT &bull; REAL-TIME ORDERBOOK TELEMETRY</div>
           <div class="report-header-main">
             <div class="report-asset-name">${escapeHtml(sym)}</div>
             <div class="report-badge-group">
-              <span class="report-tag tag-audited">${regime}</span>
-              <span class="report-tag tag-verified">LIVE WEBSOCKET / REST</span>
+              <span class="report-tag tag-audited">${escapeHtml(regime)}</span>
+              <span class="report-tag tag-verified">LIVE REST / WS DEPTH</span>
             </div>
           </div>
         </div>
 
         <div class="health-strip-card">
           <div class="health-metric-left">
-            <div class="health-label-eyebrow">LAST SPOT PRICE</div>
-            <div class="health-score-val ${isUp ? 'allow' : 'block'}">${lastPrice}</div>
+            <div class="health-label-eyebrow">CURRENT SPOT PRICE</div>
+            <div class="health-score-val ${isUp ? 'allow' : 'block'}">$${lastPrice}</div>
             <div class="health-score-sub" style="color: ${isUp ? '#059669' : '#DC2626'}; font-weight: 600;">
               ${isUp ? '+' : ''}${chg.toFixed(2)}% (24h Change)
             </div>
@@ -1691,11 +1569,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="health-specs-right">
             <div class="health-spec-cell">
               <div class="h-spec-label">24H HIGH</div>
-              <div class="h-spec-val font-mono">${high}</div>
+              <div class="h-spec-val font-mono">$${high}</div>
             </div>
             <div class="health-spec-cell">
               <div class="h-spec-label">24H LOW</div>
-              <div class="h-spec-val font-mono">${low}</div>
+              <div class="h-spec-val font-mono">$${low}</div>
             </div>
             <div class="health-spec-cell">
               <div class="h-spec-label">24H VOLUME</div>
@@ -1712,19 +1590,23 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card-header-with-badge">
             <div class="section-title-with-icon">
               <span class="header-svg-icon">${svgIcon('activity', 16)}</span>
-              <span>Orderbook Liquidity Depth &amp; Pressure</span>
+              <span>Orderbook Depth &amp; Liquidity Imbalance</span>
             </div>
             <span class="synthesized-badge">${escapeHtml(imbalanceDesc)}</span>
           </div>
 
-          <div class="exploit-matrix-card" style="padding: 16px 20px;">
+          <div class="exploit-matrix-card" style="padding: 18px 20px; background: #FFFFFF;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; font-weight: 700; font-family: var(--font-mono);">
-              <span style="color: #059669;">BIDS (BUYERS): ${Math.round(bidDepth).toLocaleString()} (${bidPct}%)</span>
-              <span style="color: #DC2626;">ASKS (SELLERS): ${Math.round(askDepth).toLocaleString()} (${askPct}%)</span>
+              <span style="color: #059669;">BIDS (BUYERS): $${Math.round(bidDepth).toLocaleString()} (${bidPct}%)</span>
+              <span style="color: #DC2626;">ASKS (SELLERS): $${Math.round(askDepth).toLocaleString()} (${askPct}%)</span>
             </div>
-            <div style="height: 10px; width: 100%; border-radius: 4px; overflow: hidden; display: flex; background: #F1F5F9;">
+            <div style="height: 12px; width: 100%; border-radius: 4px; overflow: hidden; display: flex; background: #F1F5F9; border: 1px solid #E2E8F0;">
               <div style="width: ${bidPct}%; background-color: #059669; height: 100%;"></div>
               <div style="width: ${askPct}%; background-color: #DC2626; height: 100%;"></div>
+            </div>
+            <div style="margin-top: 10px; font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-mono); display: flex; justify-content: space-between;">
+              <span>Depth calculated across top 20 limit book levels</span>
+              <span>Ratio: ${(bidDepth / (askDepth || 1)).toFixed(2)}x Bid/Ask</span>
             </div>
           </div>
 
@@ -1732,295 +1614,36 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="quad-card">
               <div class="quad-card-title" style="color: #059669;">
                 <span class="quad-svg-icon">${svgIcon('trending', 14)}</span>
-                <span>Top 5 Bids (Buy Depth)</span>
+                <span>Top 5 Bid Orders (Buy Depth)</span>
               </div>
               <div class="quad-grid-data" style="grid-template-columns: 1fr 1fr;">
-                ${bids.map(([p, q]) => '<div class="q-label font-mono font-bold" style="color: #059669;">
-
-  function renderUnifiedResult(container, data) {
-    const mod = data.module || '';
-    const inner = data.data || {};
-    if (mod.includes('token') || inner.symbol || inner.is_honeypot !== undefined) {
-      renderTokenAudit(container, data);
-    } else if (mod.includes('wallet')) {
-      renderWalletResult(container, data);
-    } else if (mod.includes('tx') || mod.includes('transaction')) {
-      renderTxSimulationResult(container, data);
-    } else {
-      renderContractAudit(container, data);
-    }
-  }
-
-  function renderLoading(container, message) {
-    container.style.display = 'block';
-    container.innerHTML = '<div class="loading-box"><span class="header-svg-icon">' + svgIcon('activity', 16) + '</span> ' + escapeHtml(message) + '</div>';
-  }
-
-  function renderError(container, message) {
-    container.style.display = 'block';
-    container.innerHTML = '<div class="cleared-banner block"><div class="cleared-icon-circle">' + svgIcon('x', 16) + '</div><div class="cleared-content"><div class="cleared-title">INSPECTION ERROR</div><div class="cleared-sub">' + escapeHtml(message) + '</div></div></div>';
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  // ==========================================
-  // ON-SCROLL BLUR-TO-POP REVEAL OBSERVER
-  // ==========================================
-  function initScrollReveal() {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -40px 0px',
-      threshold: 0.10,
-    };
-
-    const revealObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const SELECTORS = [
-      // Landing Page Elements
-      '.modules-overview-section .section-lead-wrapper',
-      '.modules-tri-grid .feature-card',
-      '.wide-callout-section .callout-card',
-      '.bottom-info-section .info-col',
-      '.editorial-footer .footer-top',
-      '.editorial-footer .footer-bottom',
-
-      // Console Elements
-      '.workspace-heading',
-      '.form-row',
-      '.preset-strip',
-      '.report-title-strip',
-      '.cleared-banner',
-      '.health-strip-card',
-      '.risk-flags-section',
-      '.deep-ai-section',
-      '.ai-cards-quad .quad-card',
-      '.exploit-matrix-card',
-      '.actionable-telemetry-card',
-      '.specs-bottom-card',
-
-      // Docs & Help Elements
-      '.doc-section',
-      '.help-category-card',
-      '.faq-item'
-    ];
-
-    function scanAndObserve() {
-      // 1. Initial Hero Pop
-      const heroEls = document.querySelectorAll('.hero-left, .mockup-window');
-      heroEls.forEach((el, i) => {
-        if (!el.classList.contains('scroll-reveal')) {
-          el.classList.add('scroll-reveal');
-          setTimeout(() => {
-            el.classList.add('is-revealed');
-          }, 100 + i * 150);
-        }
-      });
-
-      // 2. All Scroll Reveal Elements
-      const elements = document.querySelectorAll(SELECTORS.join(', '));
-      elements.forEach(el => {
-        if (!el.classList.contains('scroll-reveal')) {
-          el.classList.add('scroll-reveal');
-          // If element is already below the viewport, observe it for scroll reveal
-          const rect = el.getBoundingClientRect();
-          if (rect.top >= window.innerHeight) {
-            revealObserver.observe(el);
-          } else if (rect.top > 0 && rect.bottom <= window.innerHeight) {
-            // Visible on screen now, pop it
-            setTimeout(() => {
-              el.classList.add('is-revealed');
-            }, 80);
-          } else {
-            revealObserver.observe(el);
-          }
-        }
-      });
-    }
-
-    // Run on load
-    scanAndObserve();
-
-    // Re-check on scroll
-    window.addEventListener('scroll', scanAndObserve, { passive: true });
-
-    // Watch for tab switching / DOM updates
-    const appContainer = document.getElementById('app-container') || document.body;
-    const domObserver = new MutationObserver(() => {
-      scanAndObserve();
-    });
-    domObserver.observe(appContainer, { childList: true, subtree: true });
-  }
-
-  // Trigger on init
-  initScrollReveal();
-});
- + Number(p).toFixed(2) + '</div><div class="q-val font-mono" style="text-align: right;">' + Number(q).toFixed(3) + ' size</div>').join('')}
+                ${bids.map(b => '<div class="q-label font-mono font-bold" style="color: #059669;">$' + Number(b[0]).toFixed(2) + '</div><div class="q-val font-mono" style="text-align: right;">' + Number(b[1]).toFixed(3) + ' size</div>').join('')}
               </div>
             </div>
 
             <div class="quad-card">
               <div class="quad-card-title" style="color: #DC2626;">
                 <span class="quad-svg-icon">${svgIcon('activity', 14)}</span>
-                <span>Top 5 Asks (Sell Depth)</span>
+                <span>Top 5 Ask Orders (Sell Depth)</span>
               </div>
               <div class="quad-grid-data" style="grid-template-columns: 1fr 1fr;">
-                ${asks.map(([p, q]) => '<div class="q-label font-mono font-bold" style="color: #DC2626;">
-
-  function renderUnifiedResult(container, data) {
-    const mod = data.module || '';
-    const inner = data.data || {};
-    if (mod.includes('token') || inner.symbol || inner.is_honeypot !== undefined) {
-      renderTokenAudit(container, data);
-    } else if (mod.includes('wallet')) {
-      renderWalletResult(container, data);
-    } else if (mod.includes('tx') || mod.includes('transaction')) {
-      renderTxSimulationResult(container, data);
-    } else {
-      renderContractAudit(container, data);
-    }
-  }
-
-  function renderLoading(container, message) {
-    container.style.display = 'block';
-    container.innerHTML = '<div class="loading-box"><span class="header-svg-icon">' + svgIcon('activity', 16) + '</span> ' + escapeHtml(message) + '</div>';
-  }
-
-  function renderError(container, message) {
-    container.style.display = 'block';
-    container.innerHTML = '<div class="cleared-banner block"><div class="cleared-icon-circle">' + svgIcon('x', 16) + '</div><div class="cleared-content"><div class="cleared-title">INSPECTION ERROR</div><div class="cleared-sub">' + escapeHtml(message) + '</div></div></div>';
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  // ==========================================
-  // ON-SCROLL BLUR-TO-POP REVEAL OBSERVER
-  // ==========================================
-  function initScrollReveal() {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -40px 0px',
-      threshold: 0.10,
-    };
-
-    const revealObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const SELECTORS = [
-      // Landing Page Elements
-      '.modules-overview-section .section-lead-wrapper',
-      '.modules-tri-grid .feature-card',
-      '.wide-callout-section .callout-card',
-      '.bottom-info-section .info-col',
-      '.editorial-footer .footer-top',
-      '.editorial-footer .footer-bottom',
-
-      // Console Elements
-      '.workspace-heading',
-      '.form-row',
-      '.preset-strip',
-      '.report-title-strip',
-      '.cleared-banner',
-      '.health-strip-card',
-      '.risk-flags-section',
-      '.deep-ai-section',
-      '.ai-cards-quad .quad-card',
-      '.exploit-matrix-card',
-      '.actionable-telemetry-card',
-      '.specs-bottom-card',
-
-      // Docs & Help Elements
-      '.doc-section',
-      '.help-category-card',
-      '.faq-item'
-    ];
-
-    function scanAndObserve() {
-      // 1. Initial Hero Pop
-      const heroEls = document.querySelectorAll('.hero-left, .mockup-window');
-      heroEls.forEach((el, i) => {
-        if (!el.classList.contains('scroll-reveal')) {
-          el.classList.add('scroll-reveal');
-          setTimeout(() => {
-            el.classList.add('is-revealed');
-          }, 100 + i * 150);
-        }
-      });
-
-      // 2. All Scroll Reveal Elements
-      const elements = document.querySelectorAll(SELECTORS.join(', '));
-      elements.forEach(el => {
-        if (!el.classList.contains('scroll-reveal')) {
-          el.classList.add('scroll-reveal');
-          // If element is already below the viewport, observe it for scroll reveal
-          const rect = el.getBoundingClientRect();
-          if (rect.top >= window.innerHeight) {
-            revealObserver.observe(el);
-          } else if (rect.top > 0 && rect.bottom <= window.innerHeight) {
-            // Visible on screen now, pop it
-            setTimeout(() => {
-              el.classList.add('is-revealed');
-            }, 80);
-          } else {
-            revealObserver.observe(el);
-          }
-        }
-      });
-    }
-
-    // Run on load
-    scanAndObserve();
-
-    // Re-check on scroll
-    window.addEventListener('scroll', scanAndObserve, { passive: true });
-
-    // Watch for tab switching / DOM updates
-    const appContainer = document.getElementById('app-container') || document.body;
-    const domObserver = new MutationObserver(() => {
-      scanAndObserve();
-    });
-    domObserver.observe(appContainer, { childList: true, subtree: true });
-  }
-
-  // Trigger on init
-  initScrollReveal();
-});
- + Number(p).toFixed(2) + '</div><div class="q-val font-mono" style="text-align: right;">' + Number(q).toFixed(3) + ' size</div>').join('')}
+                ${asks.map(a => '<div class="q-label font-mono font-bold" style="color: #DC2626;">$' + Number(a[0]).toFixed(2) + '</div><div class="q-val font-mono" style="text-align: right;">' + Number(a[1]).toFixed(3) + ' size</div>').join('')}
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="actionable-telemetry-card">
+          <div class="telemetry-header">
+            <span class="telemetry-svg-icon">${svgIcon('cpu', 16)}</span>
+            <span>Market Execution Signals &amp; Slippage Guidance</span>
+          </div>
+          <ul class="telemetry-list">
+            <li><strong>Tight Spread Efficiency:</strong> Bid/ask spread is currently at ${spreadPct}, indicating institutional liquidity quality.</li>
+            <li><strong>Orderbook Imbalance:</strong> ${escapeHtml(imbalanceDesc)} with a cumulative top-book liquidity of $${Math.round(totalDepth).toLocaleString()}.</li>
+            <li><strong>Market Regime:</strong> Classified as ${escapeHtml(regime)} based on 24h rolling price velocity (${chg.toFixed(2)}%).</li>
+            <li><strong>Funding / Volatility Gauge:</strong> ${escapeHtml(fundingRateStr)}.</li>
+          </ul>
         </div>
 
         <div class="raw-dev-section">
