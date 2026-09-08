@@ -1555,4 +1555,83 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
+
+  // ==========================================
+  // ON-SCROLL BLUR-TO-POP REVEAL OBSERVER
+  // ==========================================
+  function initScrollReveal() {
+    if (!('IntersectionObserver' in window)) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.08,
+    };
+
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    function scanAndObserve() {
+      const selectors = [
+        '.hero-editorial',
+        '.editorial-section',
+        '.feature-card',
+        '.terminal-callout',
+        '.info-band',
+        '.footer-editorial',
+        '.doc-section',
+        '.help-category-card',
+        '.faq-item',
+        '.workspace-heading',
+        '.workspace-form-card',
+        '.report-title-strip',
+        '.cleared-banner',
+        '.health-strip-card',
+        '.risk-flags-section',
+        '.deep-ai-section',
+        '.quad-card',
+        '.exploit-matrix-card',
+        '.matrix-col',
+        '.actionable-telemetry-card',
+        '.specs-bottom-card'
+      ];
+      
+      const elements = document.querySelectorAll(selectors.join(', '));
+      elements.forEach(el => {
+        if (!el.classList.contains('scroll-reveal')) {
+          el.classList.add('scroll-reveal');
+          // If already in viewport on load, reveal with small delay
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            setTimeout(() => {
+              el.classList.add('is-revealed');
+            }, 60);
+          } else {
+            revealObserver.observe(el);
+          }
+        }
+      });
+    }
+
+    // Initial scan
+    scanAndObserve();
+
+    // Re-scan whenever DOM updates (tabs switch, modules switch, audit results arrive)
+    const appContainer = document.getElementById('app-container') || document.body;
+    const domObserver = new MutationObserver(() => {
+      scanAndObserve();
+    });
+    domObserver.observe(appContainer, { childList: true, subtree: true });
+
+    // Also re-scan on window scroll/resize
+    window.addEventListener('scroll', scanAndObserve, { passive: true });
+  }
+
+  initScrollReveal();
 });

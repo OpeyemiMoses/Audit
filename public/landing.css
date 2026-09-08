@@ -61,17 +61,94 @@ html, body {
 }
 
 /* Views Management */
-.view-panel {
-  display: none;
-  animation: fadeIn 0.25s ease forwards;
-}
-.view-panel.active {
-  display: block;
+/* ==========================================================================
+   RISE-IN & ON-SCROLL BLUR-TO-POP REVEAL ANIMATION SYSTEM
+   ========================================================================== */
+
+@keyframes riseInPop {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translateY(-2px) scale(1.004);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+.view-panel {
+  display: none;
+}
+
+.view-panel.active {
+  display: block;
+  animation: riseInPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.module-form-pane.active {
+  animation: riseInPop 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered rise-in for freshly rendered audit cards */
+.audit-report-wrapper > * {
+  animation: riseInPop 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.audit-report-wrapper > *:nth-child(1) { animation-delay: 0.03s; }
+.audit-report-wrapper > *:nth-child(2) { animation-delay: 0.07s; }
+.audit-report-wrapper > *:nth-child(3) { animation-delay: 0.11s; }
+.audit-report-wrapper > *:nth-child(4) { animation-delay: 0.15s; }
+.audit-report-wrapper > *:nth-child(5) { animation-delay: 0.19s; }
+.audit-report-wrapper > *:nth-child(6) { animation-delay: 0.23s; }
+.audit-report-wrapper > *:nth-child(7) { animation-delay: 0.27s; }
+.audit-report-wrapper > *:nth-child(8) { animation-delay: 0.31s; }
+
+/* On-scroll blur-to-pop reveal class */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px) scale(0.96);
+  filter: blur(10px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+.scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+}
+
+/* Staggered delay for grid items */
+.ai-cards-quad .quad-card:nth-child(1),
+.matrix-quad-grid .matrix-col:nth-child(1),
+.modules-tri-grid .feature-card:nth-child(1) {
+  transition-delay: 0.05s;
+}
+
+.ai-cards-quad .quad-card:nth-child(2),
+.matrix-quad-grid .matrix-col:nth-child(2),
+.modules-tri-grid .feature-card:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.ai-cards-quad .quad-card:nth-child(3),
+.matrix-quad-grid .matrix-col:nth-child(3),
+.modules-tri-grid .feature-card:nth-child(3) {
+  transition-delay: 0.15s;
+}
+
+.ai-cards-quad .quad-card:nth-child(4),
+.matrix-quad-grid .matrix-col:nth-child(4) {
+  transition-delay: 0.2s;
 }
 
 /* ========================================================
