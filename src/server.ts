@@ -92,10 +92,10 @@ app.get('/mcp/tools', (_req: Request, res: Response) => {
   });
 });
 
-// Binance Market Alpha Endpoint
-app.get('/market/binance', async (req: Request, res: Response, next: NextFunction) => {
+// Binance Market Alpha & Orderbook Depth Endpoints (Support GET & POST)
+const handleMarketDepth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const symbol = (req.query.symbol as string) || 'BNBUSDT';
+    const symbol = (req.body?.symbol || req.query.symbol as string || 'BNBUSDT');
     const alpha = await binanceAdapter.getMarketAlpha(symbol);
     if (!alpha) {
       res.status(404).json({ status: 'error', message: `No Binance market data available for ${symbol}` });
@@ -105,7 +105,12 @@ app.get('/market/binance', async (req: Request, res: Response, next: NextFunctio
   } catch (err) {
     next(err);
   }
-});
+};
+
+app.get('/market/binance', handleMarketDepth);
+app.get('/market/depth', handleMarketDepth);
+app.post('/market/depth', handleMarketDepth);
+
 
 // Helper: validate and register POST endpoints
 function registerEndpoint(routePath: string, schema: z.ZodTypeAny, fn: (input: any) => Promise<unknown>) {
