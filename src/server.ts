@@ -394,9 +394,11 @@ async function start() {
   });
 }
 
-start().catch((err) => {
-  logger.error('Failed to start server', { err });
-  process.exit(1);
-});
+if (!process.env.VERCEL) {
+  start().catch((err) => {
+    logger.error('Failed to start server', { err });
+    process.exit(1);
+  });
+}
 
 export default app;
