@@ -58,6 +58,8 @@ app.use(limiter);
 // Serve frontend UI from public/
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
+const assetsDir = path.join(__dirname, '..', 'assets');
+app.use('/assets', express.static(assetsDir));
 
 // Health check
 app.get('/health', (_req: Request, res: Response) => {

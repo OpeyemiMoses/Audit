@@ -1,4 +1,12 @@
-﻿# AUDIT — Intelligence & Security Layer for Binance Agent OS
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-full-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-full-black.png">
+    <img src="assets/brand/logo-full-black.png" alt="AUDIT Logo and Wordmark" width="420">
+  </picture>
+</p>
+
+# AUDIT — Intelligence & Security Layer for Binance Agent OS
 
 > **Official Submission for the Binance Agent OS Mini Hackathon**  
 > **Track A: Agent Creation** ($20,000 USDC Prize Pool)  
@@ -9,6 +17,20 @@
 [![Groq AI](https://img.shields.io/badge/AI%20Reasoning-Groq%20Llama%203.3%20%2F%20GPT--OSS-orange?style=flat-square)](https://groq.com)
 [![BNB Chain](https://img.shields.io/badge/Chains-BNB%20%7C%20opBNB%20%7C%20EVM-yellow?style=flat-square)](https://bnbchain.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
+
+---
+
+## Table of Contents
+- [1. Project Overview & Goals](#1-project-overview--goals)
+- [2. System Architecture](#2-system-architecture)
+- [3. The 9 Native MCP Tools](#3-the-9-native-mcp-tools)
+- [4. Quick Start & Replication Guide](#4-quick-start--replication-guide)
+- [5. Connecting to Claude Desktop / Cursor](#5-connecting-to-claude-desktop--cursor)
+- [6. Sample REST API Query](#6-sample-rest-api-query)
+- [7. Supported Blockchains](#7-supported-blockchains)
+- [8. Project Structure](#8-project-structure)
+- [9. Contributing & Governance](#9-contributing--governance)
+- [10. License](#10-license)
 
 ---
 

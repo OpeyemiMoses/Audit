@@ -67,6 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (brandBtn) {
     brandBtn.addEventListener('click', () => switchView('overview'));
   }
+  const sideBrandBtn = document.getElementById('side-brand-btn');
+  if (sideBrandBtn) {
+    sideBrandBtn.addEventListener('click', () => switchView('overview'));
+  }
 
   // "Launch console" Buttons
   const launchBtns = [

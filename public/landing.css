@@ -2386,3 +2386,189 @@ html, body {
 .ai-cards-quad .quad-card:nth-child(2) { transition-delay: 0.12s; }
 .ai-cards-quad .quad-card:nth-child(3) { transition-delay: 0.20s; }
 .ai-cards-quad .quad-card:nth-child(4) { transition-delay: 0.28s; }
+
+
+/* ========================================================
+   BRAND ASSETS: LOGO & WORDMARK LOCKUPS (LIGHT & DARK AWARE)
+   ======================================================== */
+.brand-logo-img {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-wordmark-img {
+  height: 19px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Footer brand lockup */
+.footer-logo-img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.footer-wordmark-img {
+  height: 17px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Sidebar brand lockup */
+.sidebar-brand-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-hairline);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.sidebar-logo-img {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar-wordmark-img {
+  height: 15px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-muted);
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+/* Theme Switching for Black vs White Assets */
+.theme-white {
+  display: none !important;
+}
+
+.theme-black {
+  display: block !important;
+}
+
+[data-theme="dark"] .theme-black {
+  display: none !important;
+}
+
+[data-theme="dark"] .theme-white {
+  display: block !important;
+}
+
+
+/* ========================================================
+   BRAND ASSETS: LOGO & WORDMARK LOCKUPS (LIGHT & DARK AWARE)
+   ======================================================== */
+.brand-logo-img {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-wordmark-img {
+  height: 19px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Footer brand lockup */
+.footer-logo-img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.footer-wordmark-img {
+  height: 17px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Sidebar brand lockup */
+.sidebar-brand-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-hairline);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.sidebar-logo-img {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar-wordmark-img {
+  height: 15px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-muted);
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+/* Theme Switching for Black vs White Assets */
+.theme-white {
+  display: none !important;
+}
+
+.theme-black {
+  display: block !important;
+}
+
+[data-theme="dark"] .theme-black {
+  display: none !important;
+}
+
+[data-theme="dark"] .theme-white {
+  display: block !important;
+}
