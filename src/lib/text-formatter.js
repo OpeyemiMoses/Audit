@@ -424,7 +424,7 @@ function formatUnifiedText(raw) {
   return out;
 }
 
-module.exports = {
+export {
   formatTokenText,
   formatContractText,
   formatWalletText,
