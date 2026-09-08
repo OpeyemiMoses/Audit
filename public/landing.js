@@ -1565,7 +1565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observerOptions = {
       root: null,
       rootMargin: '0px 0px -40px 0px',
-      threshold: 0.08,
+      threshold: 0.10,
     };
 
     const revealObserver = new IntersectionObserver((entries, obs) => {
@@ -1577,41 +1577,61 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, observerOptions);
 
+    const SELECTORS = [
+      // Landing Page Elements
+      '.modules-overview-section .section-lead-wrapper',
+      '.modules-tri-grid .feature-card',
+      '.wide-callout-section .callout-card',
+      '.bottom-info-section .info-col',
+      '.editorial-footer .footer-top',
+      '.editorial-footer .footer-bottom',
+
+      // Console Elements
+      '.workspace-heading',
+      '.form-row',
+      '.preset-strip',
+      '.report-title-strip',
+      '.cleared-banner',
+      '.health-strip-card',
+      '.risk-flags-section',
+      '.deep-ai-section',
+      '.ai-cards-quad .quad-card',
+      '.exploit-matrix-card',
+      '.actionable-telemetry-card',
+      '.specs-bottom-card',
+
+      // Docs & Help Elements
+      '.doc-section',
+      '.help-category-card',
+      '.faq-item'
+    ];
+
     function scanAndObserve() {
-      const selectors = [
-        '.hero-editorial',
-        '.editorial-section',
-        '.feature-card',
-        '.terminal-callout',
-        '.info-band',
-        '.footer-editorial',
-        '.doc-section',
-        '.help-category-card',
-        '.faq-item',
-        '.workspace-heading',
-        '.workspace-form-card',
-        '.report-title-strip',
-        '.cleared-banner',
-        '.health-strip-card',
-        '.risk-flags-section',
-        '.deep-ai-section',
-        '.quad-card',
-        '.exploit-matrix-card',
-        '.matrix-col',
-        '.actionable-telemetry-card',
-        '.specs-bottom-card'
-      ];
-      
-      const elements = document.querySelectorAll(selectors.join(', '));
+      // 1. Initial Hero Pop
+      const heroEls = document.querySelectorAll('.hero-left, .mockup-window');
+      heroEls.forEach((el, i) => {
+        if (!el.classList.contains('scroll-reveal')) {
+          el.classList.add('scroll-reveal');
+          setTimeout(() => {
+            el.classList.add('is-revealed');
+          }, 100 + i * 150);
+        }
+      });
+
+      // 2. All Scroll Reveal Elements
+      const elements = document.querySelectorAll(SELECTORS.join(', '));
       elements.forEach(el => {
         if (!el.classList.contains('scroll-reveal')) {
           el.classList.add('scroll-reveal');
-          // If already in viewport on load, reveal with small delay
+          // If element is already below the viewport, observe it for scroll reveal
           const rect = el.getBoundingClientRect();
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
+          if (rect.top >= window.innerHeight) {
+            revealObserver.observe(el);
+          } else if (rect.top > 0 && rect.bottom <= window.innerHeight) {
+            // Visible on screen now, pop it
             setTimeout(() => {
               el.classList.add('is-revealed');
-            }, 60);
+            }, 80);
           } else {
             revealObserver.observe(el);
           }
@@ -1619,19 +1639,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Initial scan
+    // Run on load
     scanAndObserve();
 
-    // Re-scan whenever DOM updates (tabs switch, modules switch, audit results arrive)
+    // Re-check on scroll
+    window.addEventListener('scroll', scanAndObserve, { passive: true });
+
+    // Watch for tab switching / DOM updates
     const appContainer = document.getElementById('app-container') || document.body;
     const domObserver = new MutationObserver(() => {
       scanAndObserve();
     });
     domObserver.observe(appContainer, { childList: true, subtree: true });
-
-    // Also re-scan on window scroll/resize
-    window.addEventListener('scroll', scanAndObserve, { passive: true });
   }
 
+  // Trigger on init
   initScrollReveal();
 });
