@@ -274,10 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => ripple.remove(), 600);
   });
 
-  // Check URL params on initial load
+  // Check URL params or path on initial load
   try {
+    const pathPart = window.location.pathname.replace(/^\//, '').toLowerCase();
     const urlParams = new URLSearchParams(window.location.search);
-    const viewParam = urlParams.get('view');
+    const viewParam = urlParams.get('view') || (views[pathPart] ? pathPart : null);
     const modParam = urlParams.get('module');
     if (viewParam && views[viewParam]) {
       switchView(viewParam, modParam || null);

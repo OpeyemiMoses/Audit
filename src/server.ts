@@ -73,6 +73,11 @@ app.use(express.static(publicDir));
 const assetsDir = path.join(__dirname, '..', 'assets');
 app.use('/assets', express.static(assetsDir));
 
+// SPA Client-side route fallbacks
+app.get(['/console', '/docs', '/help'], (_req: Request, res: Response) => {
+  res.sendFile(path.join(publicDir, 'index.html'));
+});
+
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
   res.json({
