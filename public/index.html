@@ -584,7 +584,7 @@ import requests
 
 def safe_trade_agent(token_address, amount):
     # 1. Query AUDIT Security Layer
-    audit = requests.post("http://localhost:4000/token/analyze", json={
+    audit = requests.post("https://audit-production-4e65.up.railway.app/token/analyze", json={
         "address": token_address,
         "chain": "bsc"
     }).json()

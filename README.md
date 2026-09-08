@@ -21,6 +21,17 @@
 </p>
 
 <p align="center">
+  <a href="https://audit-onbinance.vercel.app"><img src="https://img.shields.io/badge/Live%20App-audit--onbinance.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Web App"></a>
+  &nbsp;
+  <a href="https://audit-production-4e65.up.railway.app"><img src="https://img.shields.io/badge/Production%20API-audit--production--4e65.up.railway.app-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway Production API"></a>
+</p>
+
+<p align="center">
+  🌐 <strong>Live App:</strong> <a href="https://audit-onbinance.vercel.app">https://audit-onbinance.vercel.app</a> &nbsp;&bull;&nbsp;
+  ⚡ <strong>Production API:</strong> <a href="https://audit-production-4e65.up.railway.app">https://audit-production-4e65.up.railway.app</a>
+</p>
+
+<p align="center">
   <a href="#1-what-is-audit">Overview</a> &nbsp;&middot;&nbsp;
   <a href="#2-how-it-works-with-binance-agent-os">Agent OS Integration</a> &nbsp;&middot;&nbsp;
   <a href="#3-the-9-mcp-tools">MCP Tools</a> &nbsp;&middot;&nbsp;
@@ -257,7 +268,7 @@ No `.env`, no installation, no API keys needed on their side.
 **For REST API calls (any HTTP client, agent, or tool):**
 ```bash
 # Anyone can call this directly -- no setup needed
-curl -X POST https://your-deployment-url.railway.app/token/analyze \
+curl -X POST https://audit-production-4e65.up.railway.app/token/analyze \
   -H "Content-Type: application/json" \
   -d '{ "address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82", "chain": "bsc" }'
 ```
@@ -280,7 +291,7 @@ or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
     },
     "audit-security": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://your-deployment-url.railway.app/mcp"]
+      "args": ["-y", "mcp-remote", "https://audit-production-4e65.up.railway.app/mcp"]
     }
   }
 }
@@ -337,10 +348,10 @@ Claude will call `audit_token` &rarr; `get_binance_market_alpha` &rarr; `evaluat
 
 ```bash
 # Discover all tools and their required parameters
-curl https://your-deployment-url.railway.app/mcp/tools
+curl https://audit-production-4e65.up.railway.app/mcp/tools
 
 # Execute any tool
-curl -X POST https://your-deployment-url.railway.app/mcp/execute \
+curl -X POST https://audit-production-4e65.up.railway.app/mcp/execute \
   -H "Content-Type: application/json" \
   -d '{
     "tool": "get_binance_market_alpha",
