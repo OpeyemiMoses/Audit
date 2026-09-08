@@ -14,7 +14,7 @@ const logger = winston.createLogger({
     process.env.NODE_ENV === 'production'
       ? combine(timestamp(), json())
       : combine(colorize(), timestamp({ format: 'HH:mm:ss' }), devFormat),
-  transports: [new winston.transports.Console()],
+  transports: [new winston.transports.Console({ stderrLevels: ['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly'] })],
 });
 
 export default logger;

@@ -6,6 +6,12 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 import { analyzeToken } from './modules/token/analyze.js';
 import { analyzeContract } from './modules/contract/analyze.js';
 import { analyzeTransaction } from './modules/transaction/analyze.js';
@@ -17,7 +23,7 @@ import { analyzeUnified } from './modules/unified/analyze.js';
 import { binanceAdapter } from './adapters/binance.js';
 import logger from './lib/logger.js';
 
-dotenv.config();
+
 
 // Load text formatter
 import {
@@ -303,7 +309,7 @@ RETURNS: Automatically detected audit type and full readable security report.`,
 async function run() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  logger.info('[MCP] AUDIT Binance Agent OS MCP Server running on stdio — Readable Text Mode Active');
+  console.error('[MCP] AUDIT Binance Agent OS MCP Server running on stdio — Readable Text Mode Active');
 }
 
 run().catch((err) => {
