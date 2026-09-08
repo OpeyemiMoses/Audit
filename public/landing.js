@@ -1792,6 +1792,118 @@ function renderMarketResult(container, resData) {
     domObserver.observe(appContainer, { childList: true, subtree: true });
   }
 
+  // ========================================================
+  // 5. MOBILE NAVIGATION & SIDEBAR DRAWER HANDLERS
+  // ========================================================
+  const topHamburger = document.getElementById('btn-top-hamburger');
+  const topMobileDrawer = document.getElementById('top-mobile-drawer');
+  const consoleHamburger = document.getElementById('btn-console-hamburger');
+  const consoleSidebar = document.getElementById('console-sidebar');
+  const consoleOverlay = document.getElementById('console-sidebar-overlay');
+  const closeSidebarBtn = document.getElementById('btn-close-sidebar');
+  const mobileLaunchBtn = document.getElementById('btn-mobile-launch');
+
+  // Toggle Top Navigation Mobile Drawer
+  if (topHamburger && topMobileDrawer) {
+    topHamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = topMobileDrawer.classList.toggle('open');
+      topHamburger.classList.toggle('active', isOpen);
+      topHamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // Close top drawer when tapping outside
+    document.addEventListener('click', (e) => {
+      if (topMobileDrawer.classList.contains('open') && !topMobileDrawer.contains(e.target) && !topHamburger.contains(e.target)) {
+        topMobileDrawer.classList.remove('open');
+        topHamburger.classList.remove('active');
+        topHamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Mobile Top Nav Link Click -> Switch View and Close
+  document.querySelectorAll('.mobile-nav-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const view = item.getAttribute('data-view');
+      if (view) {
+        switchView(view);
+        // Sync active state in mobile drawer
+        document.querySelectorAll('.mobile-nav-item').forEach((i) => i.classList.remove('active'));
+        item.classList.add('active');
+      }
+      if (topMobileDrawer) {
+        topMobileDrawer.classList.remove('open');
+        if (topHamburger) {
+          topHamburger.classList.remove('active');
+          topHamburger.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+  });
+
+  if (mobileLaunchBtn) {
+    mobileLaunchBtn.addEventListener('click', () => {
+      switchView('console', 'contract');
+      if (topMobileDrawer) {
+        topMobileDrawer.classList.remove('open');
+        if (topHamburger) {
+          topHamburger.classList.remove('active');
+          topHamburger.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+  }
+
+  // Open Console Sidebar Drawer on Mobile
+  function openConsoleSidebar() {
+    if (consoleSidebar) consoleSidebar.classList.add('mobile-open');
+    if (consoleOverlay) consoleOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Close Console Sidebar Drawer on Mobile
+  function closeConsoleSidebar() {
+    if (consoleSidebar) consoleSidebar.classList.remove('mobile-open');
+    if (consoleOverlay) consoleOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (consoleHamburger) {
+    consoleHamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openConsoleSidebar();
+    });
+  }
+
+  if (closeSidebarBtn) {
+    closeSidebarBtn.addEventListener('click', closeConsoleSidebar);
+  }
+
+  if (consoleOverlay) {
+    consoleOverlay.addEventListener('click', closeConsoleSidebar);
+  }
+
+  // When clicking ANY module/item inside the sidebar on mobile, auto-close the drawer
+  document.querySelectorAll('.console-sidebar .sidebar-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 900) {
+        closeConsoleSidebar();
+      }
+    });
+  });
+
+  // Close with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (topMobileDrawer && topMobileDrawer.classList.contains('open')) {
+        topMobileDrawer.classList.remove('open');
+        if (topHamburger) topHamburger.classList.remove('active');
+      }
+      closeConsoleSidebar();
+    }
+  });
+
   // Trigger on init
   initScrollReveal();
 });

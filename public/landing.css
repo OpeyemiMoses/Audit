@@ -2572,3 +2572,309 @@ html, body {
 [data-theme="dark"] .theme-white {
   display: block !important;
 }
+
+/* ========================================================= */
+/* MOBILE NAVIGATION & DASHBOARD DRAWER STYLES               */
+/* ========================================================= */
+
+/* --- Top Navbar Hamburger Button --- */
+.nav-hamburger-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.nav-hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-strong);
+}
+
+.nav-hamburger-btn .ham-line {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-hamburger-btn.active .ham-line:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-hamburger-btn.active .ham-line:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger-btn.active .ham-line:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* --- Top Mobile Dropdown Drawer --- */
+.top-mobile-drawer {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #0b0d10;
+  border-bottom: 1px solid var(--border-hairline);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.85);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  z-index: 1000;
+}
+
+.top-mobile-drawer.open {
+  max-height: 520px;
+  opacity: 1;
+}
+
+.mobile-drawer-inner {
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item.active {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+.mobile-nav-item .mob-item-arr {
+  color: var(--text-muted);
+  font-size: 16px;
+  transition: transform 0.15s ease;
+}
+
+.mobile-nav-item:hover .mob-item-arr {
+  transform: translateX(4px);
+  color: #f0b90b;
+}
+
+.mobile-drawer-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-hairline);
+}
+
+.mobile-gh-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.mobile-gh-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+/* --- Console Dashboard Mobile Elements --- */
+.workspace-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-console-hamburger {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-console-hamburger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #f0b90b;
+}
+
+.console-sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.console-sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-sidebar-close {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-sidebar-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* --- Responsive Media Queries for Mobile --- */
+@media (max-width: 860px) {
+  .top-navbar .nav-menu {
+    display: none !important;
+  }
+
+  .top-navbar .nav-cta-btn {
+    display: none !important;
+  }
+
+  .top-navbar .github-icon-btn {
+    display: none !important;
+  }
+
+  .nav-hamburger-btn {
+    display: flex !important;
+  }
+
+  .top-mobile-drawer {
+    display: block !important;
+  }
+
+  .nav-wrapper {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  .network-badge {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 900px) {
+  .console-layout {
+    grid-template-columns: 1fr !important;
+    position: relative;
+  }
+
+  .console-sidebar-overlay {
+    display: block !important;
+  }
+
+  .btn-console-hamburger {
+    display: inline-flex !important;
+  }
+
+  .btn-sidebar-close {
+    display: flex !important;
+  }
+
+  .console-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 290px !important;
+    max-width: 85vw !important;
+    height: 100vh !important;
+    z-index: 1500 !important;
+    background-color: #0b0d10 !important;
+    border-right: 1px solid var(--border-subtle) !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow-y: auto !important;
+    box-shadow: none;
+  }
+
+  .console-sidebar.mobile-open {
+    transform: translateX(0) !important;
+    box-shadow: 16px 0 50px rgba(0, 0, 0, 0.85) !important;
+  }
+
+  .workspace-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .workspace-breadcrumbs {
+    font-size: 12px;
+  }
+}
